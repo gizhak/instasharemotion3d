@@ -1,18 +1,19 @@
 .main-container {
     display: grid;
-    grid-template-columns: 8vw 1fr;
-    transition: grid-template-columns 0.8s ease;
+    grid-template-columns: 15vw 2fr 8vw;
+    /* transition: grid-template-columns 0.8s ease; */
     height: 100vh;
+    gap: 1rem;
 }
 
-.main-container:has(.app-header:hover) {
+/* .main-container:has(.app-header:hover) {
     grid-template-columns: 20vw 1fr;
-}
+} */
 
 main {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 main>*:not(.app-footer) {

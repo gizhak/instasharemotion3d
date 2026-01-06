@@ -87,12 +87,18 @@ export function AppHeader() {
 				)}
 				{user && (
 					<div className="user-info">
-						<Link to={`user/${user._id}`}>
+						{/* <Link to={`user/${user._id}`}>
 							{user.imgUrl && <img src={user.imgUrl} />}
 							<div className="user-name">{user.fullname}</div>
-						</Link>
-						<span className="score">{user.score?.toLocaleString()}</span>
-						<button onClick={onLogout}>logout</button>
+						</Link> */}
+						{
+							<NavLink to={`user/${user._id}`} className="user-link nav-item">
+								<img className="icon" src={user.imgUrl} />
+								<div className="user-name text" title={user.fullname}>Profile</div>
+							</NavLink>
+						}
+						{/* <span className="score">{user.score?.toLocaleString()}</span> */}
+						{/* <button onClick={onLogout}>logout</button> */}
 					</div>
 				)}
 			</nav>

@@ -1,181 +1,231 @@
 .app-header {
     display: flex;
     flex-direction: column;
+    align-items: center;
+
     min-height: 3.9rem;
     height: 100vh;
-    /* position: fixed; */
-    width: 8vw;
+    width: 5vw;
     background-color: var(--inst-background);
-    /* background-color: var(--clr4); */
     padding: .8rem 1rem;
+}
 
-    border-right: 1px solid #dbdbdb;
-
-    & nav {
-        display: flex;
-        flex-direction: column;
-        /* width: 1vw; */
-        align-items: center;
-        gap: 1em;
-
-        font-size: 1em;
-
-        /* .active {
-            color: var(--clr1);
-        } */
-
-        .icon {
-            font-size: 2rem;
-        }
-
-        .logo {
-            font-size: 2em;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5em;
-            /* font-weight: bold; */
-            /* margin-inline-end: 1em; */
-        }
-
-        .login-link {
-            /* margin-inline-start: auto; */
-        }
-
-        & button {
-            margin-inline-end: 0;
-        }
-    }
-
-
-
-    .user-info {
-        margin-top: 50px;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        /* margin-inline-start: auto; */
-        gap: 1em;
-        font-size: 1.2rem;
-
-        color: var(--clr1);
-
-
-        /* .score {
-            padding: 8px;
-            background-color: var(--clr2);
-            border-radius: 50%;
-            margin: 10px;
-
-            color: var(--gray1);
-        } */
-
-        & img {
-            width: 3em;
-            aspect-ratio: 1;
-            border-radius: 50%;
-        }
-
-        .user-name {
-            margin-top: 10px;
-            /* font-size: 1.2rem; */
-            font-weight: bold;
-            text-align: center;
-        }
-
-    }
+/* Navigation */
+.app-header nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: fixed;
 }
 
 .app-header nav a {
     color: var(--inst-text);
+    text-decoration: none;
 }
 
-.app-header:hover {
-    background-color: var(--inst-background);
-    width: 20vw;
-    /* border-radius: 8px; */
-    transition: width 0.8s ease;
-}
-
-.nav-item {
+/* Logo */
+.logo {
+    width: 100%;
+    min-width: fit-content;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center !important;
+    margin-bottom: 6rem;
+    gap: 0.1em;
+    flex-shrink: 0;
+}
+
+.logo .icon {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    flex-shrink: 0;
+}
+
+/* .logo .text {
+    font-size: 24px;
+    white-space: nowrap;
+} */
+
+.app-header:hover .logo {
+    justify-content: center !important;
+    /* ← נשאר במרכז! */
+}
+
+/* Nav Item */
+.nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-
-    justify-content: center;
+    /* background-color: var(--inst-buttons);
+    transition: background-color 0.3s ease; */
 }
 
-.app-header:hover nav {
-    align-items: flex-start;
-}
+.nav-item:hover {
+    background-color: var(--clr3);
+    width: 25vw;
+    transition: background-color 0.3s ease;
 
-.app-header:hover .nav-item {
-    justify-content: flex-start;
 }
 
 .nav-item .icon {
     width: 30px;
     height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
 }
 
 .nav-item .text {
+    position: absolute;
+    left: calc(50% + 25px);
     opacity: 0;
-    width: 0;
-    overflow: hidden;
     white-space: nowrap;
-    transition: opacity 0.3s ease, width 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    /* background-color: var(--inst-buttons); */
 }
 
 .app-header:hover .nav-item .text {
     opacity: 1;
-    width: auto;
-}
-
-.app-header:hover .text {
-    opacity: 1;
     font-size: 24px;
-
+    /* background-color: var(--inst-buttons); */
 }
 
+/* User Info */
+.user-info {
+    margin-top: .2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+    font-size: 1.5rem;
+    color: var(--clr1);
+}
+
+/* .user-info img {
+    width: 3em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+img {
+    object-fit: cover;
+} */
+
+.user-name {
+    /* margin-top: 5px; */
+    /* font-weight: bold; */
+    text-align: center;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
+
+    /* Header at the bottom */
     .app-header {
-        flex-direction: row;
-        height: auto;
-        min-height: auto;
-        padding: .5rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
         width: 100%;
+        height: 50px;
+        min-height: 50px;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+        border-right: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: var(--inst-background);
+        z-index: 1000;
+    }
+
+    /*  hover expansion */
+    .app-header:hover {
+        width: 100%;
+    }
+
+    .app-header nav> :not(:nth-child(-n+5)):not(.user-info) {
+        display: none;
+    }
+
+    /* Navigation - horizontal row */
+    .app-header nav {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+    }
+
+    /* Hide Logo */
+    .logo {
+        display: none;
+    }
+
+    /* Nav items */
+    .nav-item {
+        position: relative;
+        padding: 8px 12px;
+        border-radius: 0;
+    }
+
+    /*  hover background */
+    .nav-item:hover {
+        background-color: transparent;
+        width: auto;
+    }
+
+    /*  active background */
+    .app-header nav a.active .nav-item {
+        background-color: transparent;
+    }
+
+    /* only icons - hide text */
+    .nav-item .text {
+        display: none !important;
+        opacity: 0 !important;
+        position: static;
+    }
+
+    .app-header:hover .nav-item .text {
+        display: none !important;
+    }
+
+    .nav-item .icon {
+        width: 24px;
+        height: 24px;
+        position: static;
+    }
+
+    /* User info */
+    .user-info {
+        margin-top: 0;
+        margin-inline-start: 0;
+        flex-direction: row;
+        gap: 0;
         font-size: 1rem;
+    }
 
-        nav {
-            flex-direction: row;
-            gap: 1.5rem;
+    .user-info a {
+        flex-direction: row;
+        gap: 0;
+    }
 
-            .logo {
-                margin-inline-end: 1em;
-            }
-        }
+    .user-info img {
+        width: 24px;
+        height: 24px;
+    }
 
-        .user-info {
-            margin-inline-start: 1rem;
-            margin-top: 0px;
-            display: flex;
-            /* align-items: center; */
-            flex-direction: row;
-        }
-
-        .user-name {
-            margin-top: 1px;
-            /* font-size: 1.2rem; */
-            font-weight: normal;
-            text-align: center;
-        }
+    .user-name,
+    .score,
+    .user-info button {
+        display: none;
     }
 }
