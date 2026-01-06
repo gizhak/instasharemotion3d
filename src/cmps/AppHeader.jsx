@@ -35,13 +35,13 @@ export function AppHeader() {
 					<RiCamera2Line className="icon" />
 					<span className="text"></span>
 				</NavLink>
-				<NavLink to="about">
+				<NavLink to="/">
 					<div className="nav-item">
 						<GoHome className="icon" />
 						<span className="text">Home</span>
 					</div>
 				</NavLink>
-				<NavLink to="about">
+				<NavLink to="reels">
 					<div className="nav-item">
 						<CgArrowRightR className="icon" />
 						<span className="text">Reels</span>

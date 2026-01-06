@@ -3,7 +3,11 @@
 	grid-template-columns: repeat(4, 1fr);
 	grid-auto-rows: 1fr;
 	gap: 1px;
+	border-radius: 2px;
+	margin: 10px;
 }
+
+
 /* Medium screens */
 @media (max-width: 1024px) {
 	.post-list-grid {
@@ -22,7 +26,8 @@
 .post {
 	position: relative;
 	width: 100%;
-	aspect-ratio: 4 / 5; /* key change */
+	aspect-ratio: 4 / 5;
+	/* key change */
 	background: #ddd;
 	overflow: hidden;
 }

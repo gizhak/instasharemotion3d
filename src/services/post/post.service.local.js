@@ -33,23 +33,14 @@ async function query(filterBy = { txt: '', likesCount: 0 }) {
 		);
 	}
 	if (sortField === 'likesCount') {
-		posts.sort(
-			(post1, post2) => (post1[sortField] - post2[sortField]) * +sortDir
+		posts.sort((post1, post2) =>
+			(post1[sortField] - post2[sortField]) * +sortDir
 		);
 	}
 
 	posts = posts.map(
-		({ _id, txt, imgUrl, by, loc, comments, likedBy, tags }) => ({
-			_id,
-			txt,
-			imgUrl,
-			by,
-			loc,
-			comments,
-			likedBy,
-			tags,
-		})
-	);
+		({ _id, txt, imgUrl, by, loc, comments, likedBy, tags }) =>
+			({ _id, txt, imgUrl, by, loc, comments, likedBy, tags, }));
 	return posts;
 }
 

@@ -7,6 +7,7 @@ import { AboutUs, AboutTeam, AboutVision } from './pages/AboutUs';
 import { ReviewIndex } from './pages/ReviewIndex.jsx';
 import { ChatApp } from './pages/Chat.jsx';
 import { AdminIndex } from './pages/AdminIndex.jsx';
+import { ReelsIndex } from './pages/ReelsIndex.jsx';
 
 import { CarDetails } from './pages/CarDetails';
 import { UserDetails } from './pages/UserDetails';
@@ -26,10 +27,13 @@ export function RootCmp() {
 				<UserMsg />
 				<Routes>
 					<Route path="" element={<HomePage />} />
+					<Route path="reels" element={<ReelsIndex />} />
+
 					<Route path="about" element={<AboutUs />}>
 						<Route path="team" element={<AboutTeam />} />
 						<Route path="vision" element={<AboutVision />} />
 					</Route>
+
 					<Route path="explore" element={<PostIndex />} />
 					<Route path="car/:carId" element={<CarDetails />} />
 					<Route path="user/:id" element={<UserDetails />} />

@@ -41,6 +41,7 @@ ul {
 
 input {
     max-width: 100%;
+    color: var(--inst-text);
 }
 
 img,

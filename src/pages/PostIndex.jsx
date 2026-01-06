@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-	loadPosts,
-	addPost,
-	updatePost,
-	removePost,
-	addPostComment,
-} from '../store/actions/post.actions';
-
+import { loadPosts, addPost, updatePost, removePost, addPostComment } from '../store/actions/post.actions';
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
 import { postService } from '../services/post';
 import { userService } from '../services/user';
+
+import { IoSearchOutline } from 'react-icons/io5';
 
 import { PostList } from '../cmps/PostList';
 //import { PostFilter } from '../cmps/PostFilter';
@@ -60,6 +55,11 @@ export function PostIndex() {
 		loadPosts(filterBy);
 	}, [filterBy]);
 
+	function onSearch(ev) {
+		ev.preventDefault();
+		loadPosts(filterBy);
+	}
+
 	// async function onRemovePost(postId) {
 	// 	try {
 	// 		await removePost(postId);
@@ -93,10 +93,19 @@ export function PostIndex() {
 	// 	}
 	// }
 
+
+
 	return (
 		<section className="post-index">
 			<header>
-				{/* <h2>Posts</h2> */}
+				<div className="search-container">
+					<IoSearchOutline className="search-icon" />
+					<input
+						className='search-bar'
+						onChange={onSearch}
+						placeholder="Search"
+					/>
+				</div>
 				{/* {userService.getLoggedinUser() && (
 					<button onClick={onAddPost}>Add a Post</button>
 				)} */}
