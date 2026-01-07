@@ -143,6 +143,11 @@
     transition: all 0.2s ease-in-out;
 }
 
+
+.more-nav-items {
+    margin-top: 25px;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     .app-header {
@@ -167,7 +172,8 @@
         width: 100%;
     }
 
-    .app-header nav> :nth-child(n+6):not(.user-info) {
+    /* הסתר: Notifications, Create, more-nav-items */
+    .app-header nav> :nth-child(n+7):not(.user-link) {
         display: none;
     }
 
@@ -176,7 +182,6 @@
         width: 100%;
         flex-direction: row;
         justify-content: space-around;
-        /* ← space-around במקום space-evenly */
         align-items: center;
         gap: 0;
         padding: 0;
@@ -186,7 +191,7 @@
         display: none;
     }
 
-    /* Nav items  */
+    /* Nav items */
     .nav-item {
         padding: 8px;
         border-radius: 0;
@@ -215,27 +220,22 @@
         height: 24px;
     }
 
-    /* User info  */
-    .user-info {
-        margin-top: 0;
-        margin-bottom: 0;
+    /* User link (Profile) */
+    .user-link {
         padding: 8px;
         background-color: transparent;
     }
 
-    .user-info:hover {
+    .user-link:hover {
         background-color: transparent;
     }
 
-    .user-info img {
+    .user-link img {
         width: 24px;
         height: 24px;
-        background-color: transparent;
     }
 
-    .user-name,
-    .score,
-    .user-info button {
+    .user-name {
         display: none;
     }
 }
