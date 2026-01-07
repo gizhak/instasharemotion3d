@@ -88,6 +88,29 @@ export function AppHeader() {
 					</div>
 				</NavLink>
 
+				<NavLink to={`user/${user._id}`} className="user-link nav-item">
+					<img className="icon" src={user.imgUrl} />
+					<div className="user-name text" title={user.fullname}>Profile</div>
+				</NavLink>
+
+				<div className="more-nav-items">
+					<NavLink to="settings">
+						<div className="nav-item">
+							<svg aria-label="Settings" class="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Settings</title><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" x2="21" y1="4" y2="4"></line>
+								<line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" x2="21" y1="12" y2="12"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" x2="21" y1="20" y2="20"></line></svg>
+							<span className="text">More</span>
+						</div>
+					</NavLink>
+
+					<NavLink to="more-from-meta">
+						<div className="nav-item">
+							<svg aria-label="Also from Meta" class="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Also from Meta</title>
+								<path d="M9.5 11h5c1.379 0 2.5-1.122 2.5-2.5v-5C17 2.122 15.879 1 14.5 1h-5A2.503 2.503 0 0 0 7 3.5v5C7 9.878 8.12 11 9.5 11ZM9 3.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5ZM8.499 13h-5a2.503 2.503 0 0 0-2.5 2.5v5c0 1.378 1.12 2.5 2.5 2.5h5c1.379 0 2.5-1.122 2.5-2.5v-5c0-1.378-1.121-2.5-2.5-2.5Zm.5 7.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5Zm11.5-7.5h-5a2.503 2.503 0 0 0-2.5 2.5v5c0 1.378 1.12 2.5 2.5 2.5h5c1.379 0 2.5-1.122 2.5-2.5v-5c0-1.378-1.121-2.5-2.5-2.5Zm.5 7.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5Z"></path></svg>
+							<span className="text">Also from Meta</span>
+						</div>
+					</NavLink>
+
+				</div>
 
 
 
@@ -105,10 +128,10 @@ export function AppHeader() {
 							<div className="user-name">{user.fullname}</div>
 						</Link> */}
 						{
-							<NavLink to={`user/${user._id}`} className="user-link nav-item">
-								<img className="icon" src={user.imgUrl} />
-								<div className="user-name text" title={user.fullname}>Profile</div>
-							</NavLink>
+							// <NavLink to={`user/${user._id}`} className="user-link nav-item">
+							// 	<img className="icon" src={user.imgUrl} />
+							// 	<div className="user-name text" title={user.fullname}>Profile</div>
+							// </NavLink>
 						}
 						{/* <span className="score">{user.score?.toLocaleString()}</span> */}
 						{/* <button onClick={onLogout}>logout</button> */}
