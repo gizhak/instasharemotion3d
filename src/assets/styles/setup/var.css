@@ -19,4 +19,7 @@
   --inst-a: #A8A8A8;
   --inst-background: #0C1014;
   --inst-buttons: hsl(214, 11%, 18%);
+  --inst-more-dropdown-hover: #292B2E;
+  --inst-more-dropdown-hover-button: #3F4143;
+  --inst-scrollbar: #5E6062;
 }

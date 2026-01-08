@@ -5,8 +5,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    box-sizing: border-box;
+    justify-content: space-between;
+
     min-height: 3.9rem;
-    height: 100vh;
+    height: 100dvh;
     width: 72px;
     background-color: var(--inst-background);
     padding: 8px 12px 20px;
@@ -59,7 +63,7 @@
     justify-content: flex-start;
     width: 100%;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -84,7 +88,8 @@
 }
 
 .app-header:hover {
-    width: 244px;
+    width: 277px;
+    z-index: 1000;
 }
 
 .app-header:hover .nav-item .text {
@@ -144,8 +149,107 @@
 }
 
 
-.more-nav-items {
-    margin-top: 25px;
+.more-menu-items {
+    margin-top: 50px;
+    width: 250px;
+}
+
+.more-menu-container {
+    position: relative;
+    width: 100%;
+}
+
+
+.more-dropdown {
+    position: absolute;
+    bottom: 170px;
+    /* ← מעל הכפתור */
+    left: 15px;
+    width: 250px;
+    background-color: var(--inst-more-dropdown-hover);
+    /* border: 2px solid rgba(255, 255, 255, 0.1); */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 8px 0;
+    z-index: 2000;
+    animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dropdown Item */
+.dropdown-item {
+    margin: 15px 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.switch-accounts-item {
+    margin-top: 0;
+}
+
+.logout-item {
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.switch-accounts-item {
+    border-top: 5px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item:hover {
+    background-color: var(--inst-more-dropdown-hover-button);
+    border-radius: 10px;
+}
+
+.dropdown-item .icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.dropdown-item span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--inst-text);
+}
+
+/* Divider */
+.dropdown-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+}
+
+/* Hover על Sidebar - הDropdown מתרחב */
+.app-header:hover .more-dropdown {
+    width: 260px;
+}
+
+.app-header.menu-open {
+    width: 277px;
+}
+
+.app-header.menu-open .nav-item .text,
+.app-header.menu-open .user-name {
+    opacity: 1;
+}
+
+.app-header.menu-open .more-dropdown {
+    width: 260px;
 }
 
 /* Mobile */
