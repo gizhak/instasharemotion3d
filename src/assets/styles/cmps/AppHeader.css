@@ -28,11 +28,23 @@
             opacity: 1;
         }
 
+        .user-name {
+            opacity: 1;
+        }
+
+        .nav-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .logo {
+            transition: all 0.2s ease-in-out;
+        }
+
     }
 
-    .app-header:hover .nav-item .text {
+    /* .app-header:hover .nav-item .text {
         opacity: 1;
-    }
+    } */
 
     /* Navigation */
     nav {
@@ -59,9 +71,10 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: 4rem;
+        /* margin-bottom: 4rem; */
         padding: 12px;
         gap: 0.5em;
+        margin-block-end: auto;
 
 
         .icon {
@@ -108,23 +121,19 @@
         }
     }
 
+    .more-dropdown {
+        width: 260px;
+    }
+
 
 }
 
-
-.app-header:hover .user-name {
-    opacity: 1;
-}
-
-.app-header:hover .logo,
-.app-header:hover .nav-item {
-    transition: all 0.2s ease-in-out;
-}
 
 
 .more-menu-items {
-    margin-top: 50px;
+    /* margin-top: 50px; */
     width: 250px;
+    margin-block-start: auto;
 }
 
 .more-menu-container {
@@ -208,21 +217,22 @@
 }
 
 /* Hover על Sidebar - הDropdown מתרחב */
-.app-header:hover .more-dropdown {
+/* .app-header:hover .more-dropdown {
     width: 260px;
-}
+} */
 
 .app-header.menu-open {
     width: 277px;
-}
 
-.app-header.menu-open .nav-item .text,
-.app-header.menu-open .user-name {
-    opacity: 1;
-}
+    .nav-item .text,
+    .user-name {
+        opacity: 1;
+    }
 
-.app-header.menu-open .more-dropdown {
-    width: 260px;
+    .more-dropdown {
+        width: 260px;
+    }
+
 }
 
 /* Mobile */
