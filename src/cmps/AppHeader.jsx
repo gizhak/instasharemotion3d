@@ -7,17 +7,7 @@ import { logout } from '../store/actions/user.actions';
 import { useState } from 'react';
 
 // Icons
-import { RiCamera2Line } from 'react-icons/ri';
-import { GoHome } from 'react-icons/go';
-import { CgArrowRightR } from 'react-icons/cg';
-import { BsSend } from 'react-icons/bs';
-import { IoSearchOutline } from 'react-icons/io5';
-import { MdOutlineExplore } from 'react-icons/md';
-import { IoMdHeartEmpty } from 'react-icons/io';
-import { FaPlus } from 'react-icons/fa6';
 import { FaInstagram } from "react-icons/fa6";
-
-
 
 export function AppHeader() {
 	const user = useSelector((storeState) => storeState.userModule.user);
