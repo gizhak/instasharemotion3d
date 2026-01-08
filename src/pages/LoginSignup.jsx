@@ -7,6 +7,8 @@ import { userService } from '../services/user'
 import { login, signup } from '../store/actions/user.actions'
 import { ImgUploader } from '../cmps/ImgUploader'
 
+
+
 export function LoginSignup() {
     return (
         <div className="login-page">
@@ -14,15 +16,13 @@ export function LoginSignup() {
                 <NavLink to="login">Login</NavLink>
                 <NavLink to="signup">Signup</NavLink>
             </nav>
-            <Outlet/>
+            <Outlet />
         </div>
     )
 }
 
 export function Login() {
     const [users, setUsers] = useState([])
-    const [credentials, setCredentials] = useState({ username: '', password: '', fullname: '' })
-
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -34,31 +34,104 @@ export function Login() {
         setUsers(users)
     }
 
-    async function onLogin(ev = null) {
-        if (ev) ev.preventDefault()
-
-        if (!credentials.username) return
-        await login(credentials)
-        navigate('/')
-    }
-
-    function handleChange(ev) {
-        const field = ev.target.name
-        const value = ev.target.value
-        setCredentials({ ...credentials, [field]: value })
-    }
-    
     return (
-        <form className="login-form" onSubmit={onLogin}>
-            <select
-                name="username"
-                value={credentials.username}
-                onChange={handleChange}>
-                    <option value="">Select User</option>
-                    {users.map(user => <option key={user._id} value={user.username}>{user.fullname}</option>)}
-            </select>
-            <button>Login</button>
-        </form>
+        <div className="login-page">
+            {/* Left Side - Hero Section */}
+            <div className="login-hero">
+                <div className="instagram-logo">
+                    <svg aria-label="Instagram" fill="url(#instagram-gradient)" height="60" viewBox="0 0 24 24" width="60">
+                        <defs>
+                            <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#FFDC80" />
+                                <stop offset="50%" stopColor="#F56040" />
+                                <stop offset="100%" stopColor="#C13584" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 2.982c2.937 0 3.285.011 4.445.064 1.072.049 1.655.228 2.042.379.514.2.88.438 1.265.823.385.385.623.751.823 1.265.151.387.33.97.379 2.042.053 1.16.064 1.508.064 4.445s-.011 3.285-.064 4.445c-.049 1.072-.228 1.655-.379 2.042-.2.514-.438.88-.823 1.265a3.398 3.398 0 0 1-1.265.823c-.387.151-.97.33-2.042.379-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064c-1.072-.049-1.655-.228-2.042-.379a3.398 3.398 0 0 1-1.265-.823 3.398 3.398 0 0 1-.823-1.265c-.151-.387-.33-.97-.379-2.042-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445c.049-1.072.228-1.655.379-2.042.2-.514.438-.88.823-1.265a3.398 3.398 0 0 1 1.265-.823c.387-.151.97-.33 2.042-.379 1.16-.053 1.508-.064 4.445-.064M12 1c-2.987 0-3.362.013-4.535.066-1.171.054-1.97.24-2.67.512a5.391 5.391 0 0 0-1.949 1.268 5.391 5.391 0 0 0-1.268 1.949c-.272.7-.458 1.499-.512 2.67C1.013 8.638 1 9.013 1 12s.013 3.362.066 4.535c.054 1.171.24 1.97.512 2.67a5.391 5.391 0 0 0 1.268 1.949 5.391 5.391 0 0 0 1.949 1.268c.7.272 1.499.458 2.67.512C8.638 22.987 9.013 23 12 23s3.362-.013 4.535-.066c1.171-.054 1.97-.24 2.67-.512a5.391 5.391 0 0 0 1.949-1.268 5.391 5.391 0 0 0 1.268-1.949c.272-.7.458-1.499.512-2.67.053-1.173.066-1.548.066-4.535s-.013-3.362-.066-4.535c-.054-1.171-.24-1.97-.512-2.67a5.391 5.391 0 0 0-1.268-1.949 5.391 5.391 0 0 0-1.949-1.268c-.7-.272-1.499-.458-2.67-.512C15.362 1.013 14.987 1 12 1Zm0 5.351a5.649 5.649 0 1 0 0 11.298 5.649 5.649 0 0 0 0-11.298Zm0 9.316a3.667 3.667 0 1 1 0-7.334 3.667 3.667 0 0 1 0 7.334Zm7.192-9.539a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z" />
+                    </svg>
+                </div>
+                <div className="hero-content">
+
+                    <h1>See everyday moments from your <span className="highlight">close friends</span>.</h1>
+                    <div className="hero-image">
+                        {/* <img src="/img/login-hero.png" alt="Instagram preview" /> */}
+
+                        <img alt="Instagram preview" referrerPolicy="origin-when-cross-origin" src="https://static.cdninstagram.com/rsrc.php/v4/yt/r/pAv7hjq-51n.png"></img>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Side - Login Form */}
+            <div className="login-form">
+                {/* Mobile Logo - only shows on mobile */}
+                {/* <div className="mobile-logo">
+                    <svg aria-label="Instagram" fill="url(#instagram-gradient-mobile)" height="60" viewBox="0 0 24 24" width="60">
+                        <defs>
+                            <linearGradient id="instagram-gradient-mobile" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#FFDC80" />
+                                <stop offset="50%" stopColor="#F56040" />
+                                <stop offset="100%" stopColor="#C13584" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 2.982c2.937 0 3.285.011 4.445.064 1.072.049 1.655.228 2.042.379.514.2.88.438 1.265.823.385.385.623.751.823 1.265.151.387.33.97.379 2.042.053 1.16.064 1.508.064 4.445s-.011 3.285-.064 4.445c-.049 1.072-.228 1.655-.379 2.042-.2.514-.438.88-.823 1.265a3.398 3.398 0 0 1-1.265.823c-.387.151-.97.33-2.042.379-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064c-1.072-.049-1.655-.228-2.042-.379a3.398 3.398 0 0 1-1.265-.823 3.398 3.398 0 0 1-.823-1.265c-.151-.387-.33-.97-.379-2.042-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445c.049-1.072.228-1.655.379-2.042.2-.514.438-.88.823-1.265a3.398 3.398 0 0 1 1.265-.823c.387-.151.97-.33 2.042-.379 1.16-.053 1.508-.064 4.445-.064M12 1c-2.987 0-3.362.013-4.535.066-1.171.054-1.97.24-2.67.512a5.391 5.391 0 0 0-1.949 1.268 5.391 5.391 0 0 0-1.268 1.949c-.272.7-.458 1.499-.512 2.67C1.013 8.638 1 9.013 1 12s.013 3.362.066 4.535c.054 1.171.24 1.97.512 2.67a5.391 5.391 0 0 0 1.268 1.949 5.391 5.391 0 0 0 1.949 1.268c.7.272 1.499.458 2.67.512C8.638 22.987 9.013 23 12 23s3.362-.013 4.535-.066c1.171-.054 1.97-.24 2.67-.512a5.391 5.391 0 0 0 1.949-1.268 5.391 5.391 0 0 0 1.268-1.949c.272-.7.458-1.499.512-2.67.053-1.173.066-1.548.066-4.535s-.013-3.362-.066-4.535c-.054-1.171-.24-1.97-.512-2.67a5.391 5.391 0 0 0-1.268-1.949 5.391 5.391 0 0 0-1.949-1.268c-.7-.272-1.499-.458-2.67-.512C15.362 1.013 14.987 1 12 1Zm0 5.351a5.649 5.649 0 1 0 0 11.298 5.649 5.649 0 0 0 0-11.298Zm0 9.316a3.667 3.667 0 1 1 0-7.334 3.667 3.667 0 0 1 0 7.334Zm7.192-9.539a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z" />
+                    </svg>
+                </div> */}
+                <div className="login-header">
+                    <h2>Log into InstaShare</h2>
+                    <span className="settings-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xxk0z11 xvy4d1p"><path fill-rule="evenodd" clip-rule="evenodd" d="m19.967 11.267 2.224-2.06a1 1 0 0 0 .187-1.233l-1.702-2.948a1 1 0 0 0-1.162-.455l-2.895.896a7.99 7.99 0 0 0-1.27-.735l-.672-2.954A1 1 0 0 0 13.702 1H10.3a1 1 0 0 0-.975.778l-.672 2.954a7.992 7.992 0 0 0-1.27.735L4.487 4.57a1 1 0 0 0-1.162.455L1.623 7.974a1 1 0 0 0 .187 1.233l2.224 2.06a8.1 8.1 0 0 0 0 1.466l-2.224 2.06a1 1 0 0 0-.187 1.233l1.702 2.948a1 1 0 0 0 1.162.455l2.895-.896a8 8 0 0 0 1.27.735l.672 2.954a1 1 0 0 0 .975.778h3.403a1 1 0 0 0 .975-.778l.672-2.954a7.991 7.991 0 0 0 1.27-.735l2.895.896a1 1 0 0 0 1.162-.455l1.702-2.948a1 1 0 0 0-.187-1.233l-2.224-2.06a8.112 8.112 0 0 0 0-1.466zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
+                    </span>
+                </div>
+
+                <div className="users-list">
+                    {users.map(user => (
+                        <div
+                            key={user._id}
+                            className="user-login-item"
+                            onClick={async () => {
+                                await login({ username: user.username })
+                                navigate('/')
+                            }}
+                        >
+                            <img src={user.imgUrl} alt={user.fullname} />
+                            <span>{user.username}</span>
+                            <span className="arrow">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                            </span>
+                        </div>
+                    ))}
+                </div>
+
+                <button className="use-another-btn">
+                    Use another profile
+                </button>
+
+                <NavLink to="/auth/signup" className="create-account-btn">
+                    Create new account
+                </NavLink>
+
+                <div className="meta-logo">
+                    <span className="meta-text">ⵔ Meta</span>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <footer className="login-footer">
+                <div className="footer-links">
+                    <a href="#">Meta</a>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">Help</a>
+                    <a href="#">API</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+                <div className="footer-copyright">
+                    © 2026 InstaShare from Meta
+                </div>
+            </footer>
+        </div>
     )
 }
 
@@ -77,7 +150,7 @@ export function Signup() {
         const value = ev.target.value
         setCredentials({ ...credentials, [field]: value })
     }
-    
+
     async function onSignup(ev = null) {
         if (ev) ev.preventDefault()
 
