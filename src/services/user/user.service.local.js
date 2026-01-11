@@ -30,16 +30,29 @@ function remove(userId) {
     return storageService.remove('user', userId)
 }
 
-async function update({ _id, score }) {
-    const user = await storageService.get('user', _id)
-    user.score = score
-    await storageService.put('user', user)
+// async function update({ _id, score }) {
+//     const user = await storageService.get('user', _id)
+//     user.score = score
+//     await storageService.put('user', user)
 
-	// When admin updates other user's details, do not update loggedinUser
+// 	// When admin updates other user's details, do not update loggedinUser
+//     const loggedinUser = getLoggedinUser()
+//     if (loggedinUser._id === user._id) saveLoggedinUser(user)
+
+//     return user
+// }
+
+async function update(updatedUser) {
+    // מוצאים את ה-user ב-DB ומחליפים אותו
+    await storageService.put('user', updatedUser)
+
+    // עדכון session אם זה המשתמש המחובר
     const loggedinUser = getLoggedinUser()
-    if (loggedinUser._id === user._id) saveLoggedinUser(user)
+    if (loggedinUser._id === updatedUser._id) {
+        saveLoggedinUser(updatedUser)
+    }
 
-    return user
+    return updatedUser
 }
 
 async function login(userCred) {
@@ -66,15 +79,15 @@ function getLoggedinUser() {
 }
 
 function saveLoggedinUser(user) {
-	user = { 
-        _id: user._id, 
-        fullname: user.fullname, 
-        imgUrl: user.imgUrl, 
-        score: user.score, 
-        isAdmin: user.isAdmin 
+    user = {
+        _id: user._id,
+        fullname: user.fullname,
+        imgUrl: user.imgUrl,
+        score: user.score,
+        isAdmin: user.isAdmin
     }
-	sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-	return user
+    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
+    return user
 }
 
 // To quickly create an admin user, uncomment the next line

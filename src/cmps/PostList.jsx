@@ -1,11 +1,31 @@
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+
 import { userService } from '../services/user';
 import { PostPreview } from './PostPreview';
+
+// load posts from the store
+import {
+	addPostComment,
+	addPostLike,
+	loadPosts,
+} from '../store/actions/post.actions';
 
 // Icons
 import { FaHeart } from "react-icons/fa";
 import { BiSolidMessageRounded } from "react-icons/bi";
+import { use } from 'react';
 
-export function PostList({ posts, openPost }) {
+export function PostList() {
+	const posts = useSelector((storeState) => storeState.postModule.posts);
+
+	useEffect(() => {
+		loadPosts();
+	}, []);
+
+
+
 	function shouldShowActionBtns(post) {
 		const user = userService.getLoggedinUser();
 
