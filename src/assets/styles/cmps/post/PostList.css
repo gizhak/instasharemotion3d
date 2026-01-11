@@ -1,15 +1,28 @@
 .post-list-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 	grid-auto-rows: 1fr;
 	justify-content: center;
 	justify-items: center;
 	gap: 1px;
-	width: 65vw;
-	margin-top: 3rem;
+	min-width: 1000px;
+	min-height: 100px;
+	margin-top: -0.8rem;
+	border-top: 1px solid var(--inst-scrollbar);
+	/* border-bottom: 1px solid var(--inst-scrollbar); */
+	/* border-radius: 8px; */
 	padding-bottom: 20px;
 	scrollbar-width: thin;
 	scrollbar-color: var(--inst-scrollbar) transparent;
+}
+
+.login-footer {
+	/* margin-top: 1rem; */
+	margin-block-end: auto;
+	font-size: 0.8rem;
+	color: var(--inst-text);
+	min-width: 1000px;
+	/* border-top: 1px solid var(--inst-scrollbar); */
 }
 
 .post-index {
