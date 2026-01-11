@@ -34,7 +34,7 @@ async function addPostComment(postId, txt) {
 	const savedComment = await httpService.post(`post/${postId}/comment`, {
 		txt,
 	});
-	return savedComment;
+	return { postId, comment: savedComment };
 }
 
 async function togglePostLike(postId) {

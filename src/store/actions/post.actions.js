@@ -63,10 +63,11 @@ export async function updatePost(post) {
 
 export async function addPostComment(postId, txt) {
 	try {
-		const txt = prompt('Enter your comment:');
-		const msg = await postService.addPostComment(postId, txt);
-		store.dispatch(getCmdAddPostComment(msg));
-		return msg;
+		const data = await postService.addPostComment(postId, txt);
+		console.log('Service returned:', data);
+
+		store.dispatch(getCmdAddPostComment(data));
+		return data.comment;
 	} catch (err) {
 		console.log('Cannot add post msg', err);
 		throw err;
@@ -115,10 +116,11 @@ function getCmdUpdatePost(post) {
 		post,
 	};
 }
-function getCmdAddPostComment(msg) {
+function getCmdAddPostComment(data) {
 	return {
 		type: ADD_POST_COMMENT,
-		msg,
+		postId: data.postId,
+		comment: data.comment,
 	};
 }
 

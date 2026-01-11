@@ -34,16 +34,36 @@ export function postReducer(state = initialState, action) {
 			posts = state.posts.map((post) =>
 				post._id === action.post._id ? action.post : post
 			);
-			newState = { ...state, posts };
+			newState = {
+				...state,
+				posts,
+				// Live update for the post page
+				post:
+					state.post && state.post._id === action.post._id
+						? action.post
+						: state.post,
+			};
 			break;
 		case ADD_POST_COMMENT:
-			if (action.comment && state.post) {
+			if (action.comment && state.post && action.postId === state.post._id) {
 				newState = {
 					...state,
-					post: {
-						...state.post,
-						msgs: [...(state.post.comments || []), action.comment],
-					},
+					post:
+						state.post && state.post._id === action.postId
+							? {
+									...state.post,
+									comments: [...(state.post.comments || []), action.comment],
+							  }
+							: state.post,
+					// Update the posts array (for feed)
+					posts: state.posts.map((post) =>
+						post._id === action.postId
+							? {
+									...post,
+									comments: [...(post.comments || []), action.comment],
+							  }
+							: post
+					),
 				};
 				break;
 			}
