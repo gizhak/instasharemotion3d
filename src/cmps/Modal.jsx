@@ -1,10 +1,10 @@
-export function Modal({ isOpen, onClose, children }) {
+export function Modal({ isOpen, onClose, children, variant = 'menu' }) {
 	if (!isOpen) return null;
 
 	return (
 		<>
 			<div className="backdrop" onClick={onClose} />
-			<div className="modal">{children}</div>
+			<div className={`modal modal-${variant}`}>{children}</div>
 		</>
 	);
 }

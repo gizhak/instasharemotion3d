@@ -9,17 +9,29 @@
 /* MODAL */
 .modal {
 	position: fixed;
+	z-index: 101;
+}
+.modal-menu {
 	bottom: 25vh;
 	left: 50%;
 	transform: translateX(-50%);
 	width: 90%;
 	max-width: 420px;
-
 	background: #1c1c1e;
 	border-radius: 16px;
 	overflow: hidden;
+}
 
-	z-index: 101;
+.modal-comments {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 60vw;
+	max-width: 1200px;
+	max-height: 90vh;
+	background: #000;
+	border-radius: 0;
+	overflow: hidden;
 }
 
 /* MODAL ITEMS */
