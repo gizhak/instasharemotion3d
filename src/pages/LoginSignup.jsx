@@ -78,8 +78,6 @@ export function Login() {
                 </div>
             )}
 
-
-
             {/* Left Side - Hero Section */}
             <div className="login-hero">
                 <div className="instagram-logo">
