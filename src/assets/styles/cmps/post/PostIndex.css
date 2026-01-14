@@ -71,6 +71,57 @@
 	transform: scale(1.2);
 }
 
+/* Deleting overlay with dots animation */
+.deleting-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 10000;
+}
+
+.deleting-dots {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.deleting-dots span {
+	width: 12px;
+	height: 12px;
+	background: #fff;
+	border-radius: 50%;
+	animation: dotPulse 1.4s infinite ease-in-out both;
+}
+
+.deleting-dots span:nth-child(1) {
+	animation-delay: -0.32s;
+}
+
+.deleting-dots span:nth-child(2) {
+	animation-delay: -0.16s;
+}
+
+@keyframes dotPulse {
+
+	0%,
+	80%,
+	100% {
+		transform: scale(0.6);
+		opacity: 0.4;
+	}
+
+	40% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
 /* comment adding container styles */
 /* ===== POST DETAILS MODAL ===== */
 .post-details-overlay {
