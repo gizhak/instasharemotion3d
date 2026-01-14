@@ -66,15 +66,10 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 	async function handleDeleteComment(ev, commentId) {
 		ev.stopPropagation()
 		console.log('Deleting comment with ID:', commentId)
-		// כאן תוכל להוסיף את הלוגיקה למחיקת תגובה
-		// לדוגמה, קריאה לפעולה שמוחקת את התגובה מה-DB ועדכון ה-UI
 		const updatedComments = comments.filter(comment => comment.id !== commentId)
 		console.log('Updated comments after deletion:', updatedComments)
 		setComments(updatedComments)
-		// קריאה לפעולה למחיקת התגובה מה-DB
 
-		// const deleteResult = await deletePostComment(post._id, commentId)
-		// console.log('Delete comment result:', deleteResult)
 
 	}
 
@@ -163,16 +158,16 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 								{comments.length > 0 ? (
 									comments.map((comment, idx) => (
 										<div key={comment.id || idx} className="comment-item">
-											<div className="comment-header">
-												<img src={comment.by?.imgUrl} alt={comment.by?.fullname} />
+											<img src={comment.by?.imgUrl} alt={comment.by?.fullname} />
+											<div className="comment-body">
+												<div className="comment-header">
+													<span className="comment-username">{comment.by?.fullname}</span>
+													<span className="comment-text">{comment.txt}</span>
+												</div>
 												<div className="comment-meta">
 													<span className="comment-time">{comment.date}</span>
 													<span className="edit-comment" onClick={(ev) => handleDeleteComment(ev, comment.id)}>•••</span>
 												</div>
-											</div>
-											<div className="comment-content">
-												<span className="comment-username">{comment.by?.fullname}</span>
-												<span className="comment-text">{comment.txt}</span>
 											</div>
 										</div>
 									))
@@ -233,8 +228,8 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 			{/* Hover Overlay */}
 			<div className="post-overlay">
 				<div className="post-stats">
-					<div className="stat" onClick={(e) => { e.stopPropagation(); handleLike(e); }}>
-						<FaHeart />
+					<div className={`stat ${isLiked ? 'liked' : ''}`} onClick={(e) => { e.stopPropagation(); handleLike(e); }}>
+						{isLiked ? <FaHeart /> : <FaRegHeart />}
 						<span>{post.likedBy?.length || 0}</span>
 					</div>
 					<div className="stat">
