@@ -280,22 +280,6 @@
 	flex-direction: column;
 }
 
-.edit-comment {
-	margin-left: auto;
-	background: transparent;
-	border: none;
-	color: #8e8e8e;
-	font-size: 14px;
-	cursor: pointer;
-	padding: 5px 10px;
-}
-
-.comment-time {
-	font-size: 14px;
-	color: #8e8e8e;
-	margin-left: 5px;
-}
-
 .no-comments {
 	flex: 1;
 	display: flex;
@@ -318,7 +302,7 @@
 
 .comment-item {
 	display: flex;
-	gap: 12px;
+	gap: 8px;
 	margin-bottom: 16px;
 }
 
@@ -330,36 +314,48 @@
 	flex-shrink: 0;
 }
 
-.comment-content {
+.comment-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.comment-header {
 	display: inline;
 	line-height: 1.4;
-
-	.comment-username {
-		font-weight: 700;
-		font-size: 18px;
-		color: var(--inst-text);
-		margin-right: 7px;
-	}
 }
 
-
-.comment-header .comment-meta {
-	display: flex;
-	align-items: center;
-	margin-left: auto;
-	gap: 10px;
-}
-
-/* .comment-content .comment-username {
-	font-weight: 600;
-	font-size: 18px;
+.comment-username {
+	font-weight: 700;
+	font-size: 14px;
 	color: var(--inst-text);
-	margin-right: 6px;
-} */
+	margin-right: 5px;
+}
 
 .comment-text {
 	font-size: 14px;
 	color: var(--inst-text);
+}
+
+.comment-meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 6px;
+}
+
+.comment-time {
+	font-size: 14px;
+	color: #8e8e8e;
+}
+
+.edit-comment {
+	background: transparent;
+	border: none;
+	color: #8e8e8e;
+	font-size: 14px;
+	cursor: pointer;
+	padding: 5px 10px;
 }
 
 /* Actions */
@@ -446,6 +442,7 @@
 	font-size: 14px;
 	color: var(--inst-text);
 	outline: none;
+	padding-left: 10px;
 }
 
 .add-comment input::placeholder {
