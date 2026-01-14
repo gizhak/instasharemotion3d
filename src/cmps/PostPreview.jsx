@@ -10,6 +10,7 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 	const [showDetails, setShowDetails] = useState(false);
 	const [commentTxt, setCommentTxt] = useState('');
 	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	const [comments, setComments] = useState(post.comments || []);
 
@@ -50,12 +51,11 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 	}
 
 	async function handleDeletePost() {
-		if (window.confirm('Are you sure you want to delete this post?')) {
-			await removePost(post._id);
-			setShowDetails(false);
-			setShowDeleteMenu(false);
-			window.location.reload(); // Reload to update the list
-		}
+		setIsDeleting(true);
+		await removePost(post._id);
+		setShowDetails(false);
+		setShowDeleteMenu(false);
+		window.location.reload();
 	}
 
 	function toggleDeleteMenu(ev) {
@@ -101,6 +101,15 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 
 	return (
 		<article className="post-preview" onClick={openDetails}>
+			{isDeleting && (
+				<div className="deleting-overlay">
+					<div className="deleting-dots">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			)}
 
 			{/* POST DETAILS MODAL */}
 			{showDetails && (
@@ -141,16 +150,17 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 
 							{/* Delete Menu Modal */}
 							{showDeleteMenu && (
-								<div className="delete-menu-overlay" onClick={() => setShowDeleteMenu(false)}>
-									<div className="delete-menu" onClick={(e) => e.stopPropagation()}>
-										<button className="delete-menu-item delete" onClick={handleDeletePost}>
+								<>
+									<div className="backdrop" onClick={() => setShowDeleteMenu(false)} />
+									<div className="modal modal-menu-centered">
+										<div className="modal-item danger" onClick={handleDeletePost}>
 											Delete
-										</button>
-										<button className="delete-menu-item cancel" onClick={() => setShowDeleteMenu(false)}>
+										</div>
+										<div className="modal-item cancel" onClick={() => setShowDeleteMenu(false)}>
 											Cancel
-										</button>
+										</div>
 									</div>
-								</div>
+								</>
 							)}
 
 							{/* Comments Section */}
