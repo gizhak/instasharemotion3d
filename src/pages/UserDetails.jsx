@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, NavLink } from 'react-router-dom';
 
-import { loadUser } from '../store/actions/user.actions';
+import { loadUser, loadUsers } from '../store/actions/user.actions';
 import { store } from '../store/store';
 import { showSuccessMsg } from '../services/event-bus.service';
 import {
@@ -23,16 +23,24 @@ import { LoadingSpinner } from '../cmps/LoadingSpinner';
 import { loadPosts } from '../store/actions/post.actions';
 
 
-
-
 export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
+
+	const users = useSelector((storeState) => storeState.userModule.users);
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
+
+	const [activeTab, setActiveTab] = useState('posts');
+
 	const posts = useSelector((storeState) => storeState.postModule.posts);
 
 	const userPosts = posts.filter((post) => post.by._id === user?._id);
+	const otherUsers = users.filter((u) => u._id !== user?._id);
+
+	console.log('userPosts:', userPosts);
+	console.log('otherUsers:', otherUsers);
 
 	// here we will get them from collection
 	// const myPosts = postsCollection
@@ -40,13 +48,13 @@ export function UserDetails() {
 	// 	.sort({ _id: -1 });
 
 
-
-
 	useEffect(() => {
 		loadUser(params.id);
+		loadUsers();
 		loadPosts();
 		socketService.emit(SOCKET_EMIT_USER_WATCH, params.id);
 		socketService.on(SOCKET_EVENT_USER_UPDATED, onUserUpdate);
+
 
 		return () => {
 			socketService.off(SOCKET_EVENT_USER_UPDATED, onUserUpdate);
@@ -103,9 +111,6 @@ export function UserDetails() {
 		setIsModalOpen(false);
 	}
 
-
-
-
 	return (
 		<section className="user-details">
 			{isUploading && <LoadingSpinner message="Uploading profile photo..." />}
@@ -157,129 +162,71 @@ export function UserDetails() {
 							</div>
 						</div>
 					</div>
+
 					<div className="btns-section">
 						<button className="edit-btn">Edit profile</button>
 						<button className="archive-btn">View archive</button>
 					</div>
-					<div className="nav-bar">
-						<NavLink to='' end className="tab-link">
-							<div className="tab-bar">
-								<svg
-									viewBox="0 0 24 24"
-									width="24"
-									height="24"
-									fill="currentColor"
-									class="x14rh7hd"
-								>
-									<title>Posts</title>
-									<path
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-										d="M3 3H21V21H3z"
-									></path>
-									<path
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-										d="M9.01486 3 9.01486 21"
-									></path>
-									<path
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-										d="M14.98514 3 14.98514 21"
-									></path>
-									<path
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-										d="M21 9.01486 3 9.01486"
-									></path>
-									<path
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-										d="M21 14.98514 3 14.98514"
-									></path>
-								</svg>
-								<span className="text"></span>
+
+					{/* other users */}
+					<div className="suggestions-users">
+						{otherUsers.map((u) => (
+							<div className="suggestion-user" key={u._id}>
+								<img className="suggestion-user-img" src={u.imgUrl} />
+								<h4 onClick={() => navigate(`/user/${u._id}`)}>
+									{u.fullname}
+								</h4>
 							</div>
-						</NavLink>
-						<NavLink to='' end className="tab-link">
-							<div className="tab-bar">
-								<svg
-									aria-label="Saved"
-									class="x1lliihq x1n2onr6 x5n08af"
-									fill="currentColor"
-									height="18"
-									role="img"
-									viewBox="0 0 24 24"
-									width="18"
-								>
-									<title>Saved</title>
-									<polygon
-										fill="none"
-										points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-									></polygon>
-								</svg>
-								<span className="text"></span>
-							</div>
-						</NavLink>
-						<NavLink to='' end className="tab-link">
-							<div className="tab-bar">
-								<svg
-									viewBox="0 0 24 24"
-									width="24"
-									height="24"
-									fill="currentColor"
-									class="x14rh7hd"
-								>
-									<title>Tagged</title>
-									<path
-										d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465z"
-										fill="none"
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-									></path>
-									<g
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2px"
-									>
-										<path
-											d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603"
-											fill="none"
-										></path>
-										<circle
-											cx="12.07211"
-											cy="11.07515"
-											r="3.55556"
-											fill="none"
-										></circle>
-									</g>
-								</svg>
-								<span className="text"></span>
-							</div>
-						</NavLink>
+						))}
 					</div>
+
+					<div className="nav-bar">
+						<div
+							className={`tab-link ${activeTab === 'posts' ? 'active' : ''}`}
+							onClick={() => setActiveTab('posts')}
+						>
+							<div className="tab-bar">
+								<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+									<title>Posts</title>
+									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M3 3H21V21H3z"></path>
+									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M9.01486 3 9.01486 21"></path>
+									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M14.98514 3 14.98514 21"></path>
+									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M21 9.01486 3 9.01486"></path>
+									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M21 14.98514 3 14.98514"></path>
+								</svg>
+
+							</div>
+						</div>
+
+						<div
+							className={`tab-link ${activeTab === 'saved' ? 'active' : ''}`}
+							onClick={() => setActiveTab('saved')}
+						>
+							<div className="tab-bar">
+								<svg aria-label="Saved" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+									<title>Saved</title>
+									<polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
+								</svg>
+
+							</div>
+						</div>
+
+						<div
+							className={`tab-link ${activeTab === 'tagged' ? 'active' : ''}`}
+							onClick={() => setActiveTab('tagged')}
+						>
+							<div className="tab-bar">
+								<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+									<title>Tagged</title>
+									<path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></path>
+									<path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></path>
+									<circle cx="12.07211" cy="11.07515" r="3.55556" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></circle>
+								</svg>
+
+							</div>
+						</div>
+					</div>
+
 				</section>
 			)}
 
