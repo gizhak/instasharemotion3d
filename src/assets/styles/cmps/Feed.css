@@ -82,9 +82,10 @@
 	span {
 		font-weight: 800;
 	}
-	div .bookmark-icon {
-		margin-left: auto;
-	}
+}
+
+div .bookmark-icon {
+	margin-left: auto;
 }
 
 svg {

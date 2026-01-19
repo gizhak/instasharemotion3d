@@ -76,12 +76,13 @@ export function Feed() {
 	}
 
 	async function toggleBookmark(postId) {
-		const isBookmarked = loggedInUser.savedPostIds.includes(postId);
+		const isBookmarked = loggedInUser?.savedPostIds?.includes(postId);
+		const savedPostIds = loggedInUser.savedPostIds || [];
 
 		const updates = {
 			savedPostIds: isBookmarked
-				? loggedInUser.savedPostIds.filter((id) => id !== postId)
-				: [...loggedInUser.savedPostIds, postId],
+				? savedPostIds.filter((id) => id !== postId)
+				: [...savedPostIds, postId],
 		};
 
 		await updateUser(updates);
@@ -134,7 +135,7 @@ export function Feed() {
 									<div className="bookmark-icon">
 										<SvgIcon
 											iconName={
-												loggedInUser.savedPostIds.includes(post._id)
+												loggedInUser?.savedPostIds?.includes(post._id)
 													? 'bookmarkFilled'
 													: 'bookmark'
 											}
