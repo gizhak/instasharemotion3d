@@ -131,15 +131,16 @@ export function Feed() {
 										onClick={() => handleOpenComments(post._id)}
 									/>
 									<span>{post.comments.length}</span>
-									<SvgIcon
-										className="bookmark-icon"
-										iconName={
-											loggedInUser.savedPostIds.includes(post._id)
-												? 'bookmarkFilled'
-												: 'bookmark'
-										}
-										onClick={() => toggleBookmark(post._id)}
-									/>
+									<div className="bookmark-icon">
+										<SvgIcon
+											iconName={
+												loggedInUser.savedPostIds.includes(post._id)
+													? 'bookmarkFilled'
+													: 'bookmark'
+											}
+											onClick={() => toggleBookmark(post._id)}
+										/>
+									</div>
 								</div>
 								<div className="post-desc">
 									<h4 onClick={() => navigate(`/user/${post.by._id}`)}>
