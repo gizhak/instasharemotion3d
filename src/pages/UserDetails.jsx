@@ -38,9 +38,14 @@ export function UserDetails() {
 
 	const userPosts = posts.filter((post) => post.by._id === user?._id);
 	const otherUsers = users.filter((u) => u._id !== user?._id);
+	const bookmarkedPosts = posts.filter((post) => user?.savedPostIds?.includes(post._id));
 
+
+	console.log('Posts:', posts);
 	console.log('userPosts:', userPosts);
 	console.log('otherUsers:', otherUsers);
+	console.log('bookmarkedPosts:', bookmarkedPosts);
+	
 
 	// here we will get them from collection
 	// const myPosts = postsCollection
@@ -232,8 +237,8 @@ export function UserDetails() {
 
 			{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}
 
-			<PostList posts={userPosts} />
-
+			{activeTab === 'posts' && <PostList posts={userPosts} />}
+			{activeTab === 'saved' && <PostList posts={bookmarkedPosts} />}
 			{/* <footer className="login-footer">
 				<div className="footer-links">
 					<a href="#">Meta</a>

@@ -32,36 +32,54 @@ export function PostList({ posts, isExplore = false }) {
 		return post.owner?._id === user._id;
 	}
 
-	function openPost() { }
+	function openPost() {}
 
 	return (
+		// <section className="post-list-container">
+		// 	<div
+		// 		className={`post-list-grid ${
+		// 			isExplore ? 'explore-grid' : 'profile-grid'
+		// 		}`}
+		// 	>
+		// 		{posts.map((post) => {
+		// 			if (!isExplore) {
+		// 				return (
+		// 					<div className="post" key={post._id}>
+		// 						<PostPreview post={post} openPost={openPost} />
+		// 					</div>
+		// 				);
+		// 			}
+
+		// 			// // Explore mode - Instagram-like pattern
+		// 			// // Every 7th item is big (2x2)
+		// 			// const isBig = idx % 7 === 3;
+		// 			// // Every 19th item is full width
+		// 			// const isFullWidth = idx % 19 === 9;
+
+		// 			let className = 'post';
+		// 			// if (isFullWidth) className += ' post-full-width';
+		// 			// else if (isBig) className += ' post-big';
+
+		// 			return (
+		// 				<div className={className} key={post._id}>
+		// 					<PostPreview post={post} openPost={openPost} />
+		// 				</div>
+		// 			);
+		// 		})}
+		// 	</div>
+		// </section>
+
 		<section className="post-list-container">
-			<div className={`post-list-grid ${isExplore ? 'explore-grid' : 'profile-grid'}`}>
-				{posts.map((post, idx) => {
-					if (!isExplore) {
-						return (
-							<div className="post" key={post._id}>
-								<PostPreview post={post} openPost={openPost} />
-							</div>
-						);
-					}
-
-					// Explore mode - Instagram-like pattern
-					// Every 7th item is big (2x2)
-					const isBig = idx % 7 === 3;
-					// Every 19th item is full width
-					const isFullWidth = idx % 19 === 9;
-
-					let className = 'post';
-					if (isFullWidth) className += ' post-full-width';
-					else if (isBig) className += ' post-big';
-
-					return (
-						<div className={className} key={post._id}>
-							<PostPreview post={post} openPost={openPost} />
-						</div>
-					);
-				})}
+			<div
+				className={`post-list-grid ${
+					isExplore ? 'explore-grid' : 'profile-grid'
+				}`}
+			>
+				{posts.map((post) => (
+					<div className="post" key={post._id}>
+						<PostPreview post={post} openPost={openPost} />
+					</div>
+				))}
 			</div>
 		</section>
 	);
