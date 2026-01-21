@@ -36,7 +36,7 @@ export function UserDetails() {
 	const loggedInUser = useSelector((storeState) => storeState.userModule.user);
 	const users = useSelector((storeState) => storeState.userModule.users);
 	const isFollowing = loggedInUser.following?.includes(user?._id);
-	const navigate = useNavigate();
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
