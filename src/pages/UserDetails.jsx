@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, NavLink } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { loadUser, loadUsers } from '../store/actions/user.actions';
 import { store } from '../store/store';
 import { showSuccessMsg } from '../services/event-bus.service';
@@ -21,14 +21,16 @@ import { SvgIcon } from '../cmps/SvgIcon';
 import { LoadingSpinner } from '../cmps/LoadingSpinner';
 
 import { loadPosts } from '../store/actions/post.actions';
-
+// for follow functionality
+import { updateUser } from '../store/actions/user.actions';
 
 export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
-
+	const loggedInUser = useSelector((storeState) => storeState.userModule.user);
 	const users = useSelector((storeState) => storeState.userModule.users);
-
+	const isFollowing = loggedInUser.following?.includes(user?._id);
+	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 
@@ -41,10 +43,10 @@ export function UserDetails() {
 	const bookmarkedPosts = posts.filter((post) => user?.savedPostIds?.includes(post._id));
 
 
-	console.log('Posts:', posts);
-	console.log('userPosts:', userPosts);
-	console.log('otherUsers:', otherUsers);
-	console.log('bookmarkedPosts:', bookmarkedPosts);
+	// console.log('Posts:', posts);
+	// console.log('userPosts:', userPosts);
+	// console.log('otherUsers:', otherUsers);
+	// console.log('bookmarkedPosts:', bookmarkedPosts);
 
 
 	// here we will get them from collection
@@ -118,6 +120,31 @@ export function UserDetails() {
 		setIsModalOpen(false);
 	}
 
+	async function handleFollow() {
+  try {
+    let updates;
+    
+    if (isFollowing) {
+      // Unfollow: remove user._id from following array
+      updates = {
+        following: loggedInUser.following.filter(id => id !== user._id),
+      };
+      await updateUser(updates);
+      showSuccessMsg('You unfollowed this user');
+    } else {
+      // Follow: add user._id to following array
+      updates = {
+        following: [...loggedInUser.following, user._id],
+      };
+      await updateUser(updates);
+      showSuccessMsg('You are now following this user');
+    }
+  } catch (error) {
+    console.error('Error following/unfollowing user:', error);
+    showErrorMsg('Failed to update follow status');
+  }
+}
+
 	return (
 		<section className="user-details">
 			{isUploading && <LoadingSpinner message="Uploading profile photo..." />}
@@ -171,7 +198,16 @@ export function UserDetails() {
 					</div>
 
 					<div className="btns-section">
-						<button className="edit-btn">Edit profile</button>
+						{loggedInUser._id === user._id ? (
+						<button className="edit-btn" onClick={() => navigate(`/setting`)}>
+							Edit profile
+						</button>
+						) : (
+						<button className="follow-btn" onClick={handleFollow}>
+							{isFollowing ? 'Unfollow' : 'Follow'}
+					
+						</button>
+						)}
 						<button className="archive-btn">View archive</button>
 					</div>
 
@@ -179,7 +215,7 @@ export function UserDetails() {
 					<div className="suggestions-users">
 						{otherUsers.map((u) => (
 							<div className="suggestion-user" key={u._id}>
-								<img className="suggestion-user-img" src={u.imgUrl} />
+								<img className="suggestion-user-img" src={u.imgUrl} onClick={() => navigate(`/user/${u._id}`)}/>
 								<h4 onClick={() => navigate(`/user/${u._id}`)}>
 									{u.fullname}
 								</h4>
