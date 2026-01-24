@@ -27,8 +27,7 @@
 		min-width: 1000px;
 		/* border-top: 1px solid var(--inst-scrollbar); */
 	}
-
-	button {
+	button:not(.nav-arrow, .post-comment-btn) {
 		width: 100%;
 		padding: 14px;
 		margin-bottom: 1em;

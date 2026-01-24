@@ -1,28 +1,16 @@
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-
+import { PostDetailsContent } from './PostDetailsContent';
 import { userService } from '../services/user';
-import { PostPreview } from './PostPreview';
+import { SvgIcon } from './SvgIcon';
+import { Modal } from './Modal';
+import { loadPost } from '../store/actions/post.actions';
 
-// load posts from the store
-import {
-	addPostComment,
-	addPostLike,
-	loadPosts,
-} from '../store/actions/post.actions';
-
-// Icons
-import { FaHeart } from 'react-icons/fa';
-import { BiSolidMessageRounded } from 'react-icons/bi';
-import { use } from 'react';
-
-export function PostList({ posts, isExplore = false }) {
-	// const posts = useSelector((storeState) => storeState.postModule.posts);
-
-	// useEffect(() => {
-	// 	loadPosts();
-	// }, []);
+export function PostList({ posts, isExplore = false, handleLike }) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [selectedPostIndex, setSelectedPostIndex] = useState(null);
+	const post = useSelector((storeState) => storeState.postModule.post);
 
 	function shouldShowActionBtns(post) {
 		const user = userService.getLoggedinUser();
@@ -32,55 +20,90 @@ export function PostList({ posts, isExplore = false }) {
 		return post.owner?._id === user._id;
 	}
 
-	function openPost() {}
+	function checkIfLiked(post) {
+		const user = userService.getLoggedinUser();
+		if (!user) return false;
+		return post?.likedBy?.some((likedUser) => likedUser._id === user._id);
+	}
+
+	async function handleOpenPost(postId, index) {
+		setSelectedPostIndex(index);
+		await loadPost(postId);
+		setIsModalOpen(true);
+	}
+
+	function handleCloseModal() {
+		setIsModalOpen(false);
+		setSelectedPostIndex(null);
+	}
+
+	async function handleNavigate(newIndex) {
+		if (newIndex >= 0 && newIndex < posts.length) {
+			setSelectedPostIndex(newIndex);
+			await loadPost(posts[newIndex]._id);
+		}
+	}
 
 	return (
-		// <section className="post-list-container">
-		// 	<div
-		// 		className={`post-list-grid ${
-		// 			isExplore ? 'explore-grid' : 'profile-grid'
-		// 		}`}
-		// 	>
-		// 		{posts.map((post) => {
-		// 			if (!isExplore) {
-		// 				return (
-		// 					<div className="post" key={post._id}>
-		// 						<PostPreview post={post} openPost={openPost} />
-		// 					</div>
-		// 				);
-		// 			}
-
-		// 			// // Explore mode - Instagram-like pattern
-		// 			// // Every 7th item is big (2x2)
-		// 			// const isBig = idx % 7 === 3;
-		// 			// // Every 19th item is full width
-		// 			// const isFullWidth = idx % 19 === 9;
-
-		// 			let className = 'post';
-		// 			// if (isFullWidth) className += ' post-full-width';
-		// 			// else if (isBig) className += ' post-big';
-
-		// 			return (
-		// 				<div className={className} key={post._id}>
-		// 					<PostPreview post={post} openPost={openPost} />
-		// 				</div>
-		// 			);
-		// 		})}
-		// 	</div>
-		// </section>
-
 		<section className="post-list-container">
 			<div
 				className={`post-list-grid ${
 					isExplore ? 'explore-grid' : 'profile-grid'
 				}`}
 			>
-				{posts.map((post) => (
-					<div className="post" key={post._id}>
-						<PostPreview post={post} openPost={openPost} />
-					</div>
-				))}
+				{posts.map((post, index) => {
+					const isLiked = checkIfLiked(post);
+
+					return (
+						<div
+							className="post"
+							key={post._id}
+							style={{ position: 'relative' }}
+						>
+							{/* Thumbnail Image */}
+							<img
+								src={post?.imgUrl}
+								alt="post"
+								style={{
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover',
+									display: 'block',
+								}}
+							/>
+
+							{/* Hover Overlay */}
+							<div
+								className="post-overlay"
+								onClick={() => handleOpenPost(post._id, index)}
+							>
+								<div className="post-stats">
+									<div className={`stat ${isLiked ? 'liked' : ''}`}>
+										<SvgIcon iconName={isLiked ? 'likeFilled' : 'like'} />
+										<span>{post?.likedBy?.length || 0}</span>
+									</div>
+									<div className="stat">
+										<SvgIcon iconName="comment" />
+										<span>{post?.comments?.length || 0}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					);
+				})}
 			</div>
+
+			{/* Post Details Modal */}
+			<Modal isOpen={isModalOpen} onClose={handleCloseModal} variant="comments">
+				{post && (
+					<PostDetailsContent
+						post={post}
+						posts={posts}
+						currentIndex={selectedPostIndex}
+						onNavigate={handleNavigate}
+					/>
+				)}
+			</Modal>
 		</section>
 	);
 }

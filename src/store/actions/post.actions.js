@@ -7,6 +7,8 @@ import {
 	SET_POST,
 	UPDATE_POST,
 	ADD_POST_COMMENT,
+	DELETE_POST_COMMENT,
+	TOGGLE_LIKE_COMMENT,
 } from '../reducers/post.reducer';
 
 export async function loadPosts(filterBy) {
@@ -74,6 +76,18 @@ export async function addPostComment(postId, txt) {
 	}
 }
 
+export async function deletePostComment(postId, commentId) {
+	try {
+		await postService.deletePostComment(postId, commentId);
+		console.log('Comment deleted:', commentId);
+
+		store.dispatch(getCmdDeletePostComment(postId, commentId));
+	} catch (err) {
+		console.log('Cannot delete post comment', err);
+		throw err;
+	}
+}
+
 export async function addPostLike(postId) {
 	try {
 		const likedPost = await postService.togglePostLike(postId);
@@ -81,6 +95,19 @@ export async function addPostLike(postId) {
 		return likedPost;
 	} catch (err) {
 		console.log('Cannot like post', err);
+		throw err;
+	}
+}
+
+export async function toggleLikeComment(postId, commentId, userId) {
+	try {
+		const data = await postService.toggleLikeComment(postId, commentId, userId);
+		console.log('Like toggled:', data);
+
+		store.dispatch(getCmdToggleLikeComment(postId, commentId, userId));
+		return data;
+	} catch (err) {
+		console.log('Cannot toggle like on comment', err);
 		throw err;
 	}
 }
@@ -124,6 +151,22 @@ function getCmdAddPostComment(data) {
 	};
 }
 
+function getCmdDeletePostComment(postId, commentId) {
+	return {
+		type: DELETE_POST_COMMENT,
+		postId,
+		commentId,
+	};
+}
+
+function getCmdToggleLikeComment(postId, commentId, userId) {
+	return {
+		type: TOGGLE_LIKE_COMMENT,
+		postId,
+		commentId,
+		userId,
+	};
+}
 // unitTestActions()
 async function unitTestActions() {
 	await loadPosts();

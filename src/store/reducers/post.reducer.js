@@ -4,6 +4,8 @@ export const REMOVE_POST = 'REMOVE_POST';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const ADD_POST_COMMENT = 'ADD_POST_COMMENT';
+export const DELETE_POST_COMMENT = 'DELETE_POST_COMMENT';
+export const TOGGLE_LIKE_COMMENT = 'TOGGLE_LIKE_COMMENT';
 
 const initialState = {
 	posts: [],
@@ -44,6 +46,31 @@ export function postReducer(state = initialState, action) {
 						: state.post,
 			};
 			break;
+		case TOGGLE_LIKE_COMMENT:
+			return {
+				...state,
+				posts: state.posts.map((post) =>
+					post._id === action.postId
+						? {
+								...post,
+								comments: post.comments.map((comment) => {
+									if (comment.id === action.commentId) {
+										const likedBy = comment.likedBy || [];
+										const isLiked = likedBy.includes(action.userId);
+										return {
+											...comment,
+											likedBy: isLiked
+												? likedBy.filter((id) => id !== action.userId)
+												: [...likedBy, action.userId],
+										};
+									}
+									return comment;
+								}),
+						  }
+						: post
+				),
+			};
+			break;
 		case ADD_POST_COMMENT:
 			if (action.comment && state.post && action.postId === state.post._id) {
 				newState = {
@@ -51,22 +78,37 @@ export function postReducer(state = initialState, action) {
 					post:
 						state.post && state.post._id === action.postId
 							? {
-								...state.post,
-								comments: [...(state.post.comments || []), action.comment],
-							}
+									...state.post,
+									comments: [...(state.post.comments || []), action.comment],
+							  }
 							: state.post,
 					// Update the posts array (for feed)
 					posts: state.posts.map((post) =>
 						post._id === action.postId
 							? {
-								...post,
-								comments: [...(post.comments || []), action.comment],
-							}
+									...post,
+									comments: [...(post.comments || []), action.comment],
+							  }
 							: post
 					),
 				};
 				break;
 			}
+
+		case DELETE_POST_COMMENT:
+			return {
+				...state,
+				posts: state.posts.map((post) =>
+					post.id === action.postId
+						? {
+								...post,
+								comments: post.comments.filter(
+									(c) => c.id !== action.commentId
+								),
+						  }
+						: post
+				),
+			};
 		default:
 	}
 	return newState;

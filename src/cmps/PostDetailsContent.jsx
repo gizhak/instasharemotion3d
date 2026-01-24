@@ -1,0 +1,297 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import {
+	addPostComment,
+	deletePostComment,
+	toggleLikeComment,
+	addPostLike,
+	removePost,
+} from '../store/actions/post.actions.js';
+import { SvgIcon } from './SvgIcon.jsx';
+
+export function PostDetailsContent({
+	post,
+	posts,
+	currentIndex,
+	onNavigate,
+	onClose,
+}) {
+	const loggedinUser = useSelector((storeState) => storeState.userModule.user);
+
+	const [commentTxt, setCommentTxt] = useState('');
+	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [comments, setComments] = useState(post?.comments || []);
+
+	const [isLiked, setIsLiked] = useState(() => {
+		if (!loggedinUser) return false;
+		return post?.likedBy?.some((user) => user._id === loggedinUser._id);
+	});
+
+	// Update comments when post changes (for navigation)
+	useEffect(() => {
+		setComments(post?.comments || []);
+		setIsLiked(() => {
+			if (!loggedinUser) return false;
+			return post?.likedBy?.some((user) => user._id === loggedinUser._id);
+		});
+	}, [post, loggedinUser]);
+
+	async function handleLike(ev) {
+		ev.stopPropagation();
+		setIsLiked(!isLiked);
+		const likedPost = await addPostLike(post._id);
+		console.log('Liked post returned:', likedPost);
+	}
+
+	async function handleAddComment(ev) {
+		ev.preventDefault();
+		if (!commentTxt.trim()) return;
+
+		const newComment = {
+			date: new Date().toTimeString().slice(0, 5),
+			txt: commentTxt,
+			by: {
+				_id: loggedinUser._id,
+				fullname: loggedinUser.fullname,
+				imgUrl: loggedinUser.imgUrl,
+			},
+		};
+
+		setComments([...comments, newComment]);
+		setCommentTxt('');
+
+		await addPostComment(post._id, commentTxt);
+	}
+
+	async function handleDeleteComment(ev, commentId) {
+		ev.stopPropagation();
+		console.log('Post ID:', post._id, 'Comment ID:', commentId);
+
+		try {
+			const updatedComments = comments.filter((c) => c.id !== commentId);
+			setComments(updatedComments);
+
+			await deletePostComment(post._id, commentId);
+		} catch (error) {
+			console.error('Failed to delete comment:', error);
+		}
+	}
+
+	async function handleDeletePost() {
+		setIsDeleting(true);
+		await removePost(post._id);
+		setShowDeleteMenu(false);
+		if (onClose) onClose();
+		window.location.reload();
+	}
+
+	function toggleDeleteMenu(ev) {
+		ev.stopPropagation();
+		setShowDeleteMenu(!showDeleteMenu);
+	}
+	function handlePrev(ev) {
+		ev.stopPropagation();
+		if (currentIndex > 0 && onNavigate) {
+			onNavigate(currentIndex - 1);
+		}
+	}
+
+	function handleNext(ev) {
+		ev.stopPropagation();
+		if (posts && currentIndex < posts.length - 1 && onNavigate) {
+			onNavigate(currentIndex + 1);
+		}
+	}
+
+	async function handleToggleLikeComment(ev, commentId) {
+		try {
+			// Optimistically update UI immediately
+			const updatedComments = comments.map((comment) => {
+				if (comment.id === commentId) {
+					const isLiked = comment.likedBy?.includes(loggedinUser._id);
+					return {
+						...comment,
+						likedBy: isLiked
+							? comment.likedBy.filter((id) => id !== loggedinUser._id)
+							: [...(comment.likedBy || []), loggedinUser._id],
+					};
+				}
+				return comment;
+			});
+			setComments(updatedComments);
+
+			// Then update the database
+			await toggleLikeComment(post._id, commentId, loggedinUser._id);
+		} catch (error) {
+			console.error('Failed to toggle like:', error);
+			// Optionally revert the optimistic update on error
+		}
+	}
+
+	return (
+		<div className="post-details-content">
+			{isDeleting && (
+				<div className="deleting-overlay">
+					<div className="deleting-dots">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			)}
+
+			{/* Navigation Arrows */}
+			{posts && currentIndex > 0 && (
+				<button className="nav-arrow prev" onClick={handlePrev}>
+					❮
+				</button>
+			)}
+
+			{posts && currentIndex < posts.length - 1 && (
+				<button className="nav-arrow next" onClick={handleNext}>
+					❯
+				</button>
+			)}
+
+			{/* Modal Content */}
+			<div className="post-details-modal">
+				{/* Left - Image */}
+				<div className="post-details-image">
+					<img src={post.imgUrl} alt="post" />
+				</div>
+
+				{/* Right - Info */}
+				<div className="post-details-info">
+					{/* Header */}
+					<div className="post-details-header">
+						<div className="user-info">
+							<img
+								className="user-image-post"
+								src={post.by?.imgUrl}
+								alt={post.by?.fullname}
+							/>
+							<span className="username">{post.by?.fullname}</span>
+						</div>
+						<div className="more-options">
+							<SvgIcon iconName="postDots" onClick={toggleDeleteMenu} />
+						</div>
+					</div>
+
+					{/* Delete Menu Modal */}
+					{showDeleteMenu && (
+						<>
+							<div
+								className="backdrop"
+								onClick={() => setShowDeleteMenu(false)}
+							/>
+							<div className="modal modal-menu-centered">
+								<div className="modal-item danger" onClick={handleDeletePost}>
+									Delete
+								</div>
+								<div
+									className="modal-item cancel"
+									onClick={() => setShowDeleteMenu(false)}
+								>
+									Cancel
+								</div>
+							</div>
+						</>
+					)}
+
+					{/* Comments Section  */}
+					<div className="post-details-comments">
+						{comments.length > 0 ? (
+							comments.map((comment, idx) => (
+								<div key={comment.id || idx} className="comment-item">
+									<img src={comment.by?.imgUrl} alt={comment.by?.fullname} />
+									<div className="comment-body">
+										<div className="comment-header">
+											<span className="comment-username">
+												{comment.by?.fullname}
+											</span>
+											<span className="comment-text">{comment.txt}</span>
+											<span
+												className={`comment-like ${
+													comment.likedBy?.includes(loggedinUser._id)
+														? 'liked'
+														: ''
+												}`}
+												onClick={(e) => handleToggleLikeComment(e, comment.id)}
+											>
+												{comment.likedBy?.includes(loggedinUser._id)
+													? '♥'
+													: '♡'}
+											</span>
+										</div>
+										<div className="comment-meta">
+											<span className="comment-time">{comment.date}</span>
+											<span className="comment-likes">
+												{comment.likedBy?.length || 0} likes
+											</span>
+											{loggedinUser && comment.by?._id === loggedinUser._id && (
+												<SvgIcon
+													iconName="postDots"
+													onClick={(ev) => handleDeleteComment(ev, comment.id)}
+												/>
+											)}
+										</div>
+									</div>
+								</div>
+							))
+						) : (
+							<div className="no-comments">
+								<h3>No comments yet.</h3>
+								<p>Start the conversation.</p>
+							</div>
+						)}
+					</div>
+
+					{/* Actions Section */}
+					<div className="post-details-actions">
+						<div className="post-actions-modal">
+							<SvgIcon
+								iconName={isLiked ? 'likeFilled' : 'like'}
+								fill={isLiked ? '#ff3040' : 'currentColor'}
+								onClick={(e) => handleLike(e)}
+							/>
+							<SvgIcon iconName="comment" />
+							<SvgIcon iconName="share" />
+						</div>
+
+						<div className="likes-count">
+							{post.likedBy && post.likedBy.length > 0 ? (
+								<div className="post-likes">{post.likedBy.length} likes</div>
+							) : (
+								'Be the first to like this'
+							)}
+						</div>
+
+						<div className="post-date">{post.createdAt || '7 days ago'}</div>
+					</div>
+
+					{/* Add Comment Form */}
+					<form className="add-comment" onSubmit={handleAddComment}>
+						<span className="emoji-btn">
+							<SvgIcon iconName="emmoji" />
+						</span>
+
+						<input
+							type="text"
+							placeholder="  Add a comment..."
+							value={commentTxt}
+							onChange={(e) => setCommentTxt(e.target.value)}
+						/>
+						<button
+							className="post-comment-btn"
+							type="submit"
+							disabled={!commentTxt.trim()}
+						>
+							Post
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	);
+}
