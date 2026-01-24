@@ -20,6 +20,7 @@
 @import 'cmps/AppFooter';
 @import 'cmps/UserMsg';
 @import 'cmps/LoadingSpinner';
+@import 'cmps/Search';
 
 @import 'cmps/car/CarIndex';
 @import 'cmps/car/CarList';

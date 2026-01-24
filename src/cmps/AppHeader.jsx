@@ -9,7 +9,7 @@ import { useState } from 'react';
 // Icons
 import { FaInstagram } from "react-icons/fa6";
 
-export function AppHeader({ onCreatePostClick }) {
+export function AppHeader({ onCreatePostClick, onSearchClick }) {
 	const user = useSelector((storeState) => storeState.userModule.user);
 	const navigate = useNavigate();
 
@@ -100,13 +100,11 @@ export function AppHeader({ onCreatePostClick }) {
 						<span className="text">Messages</span>
 					</div>
 				</NavLink>
-				<NavLink to="" onClick={closeMoreMenu}>
-					<div className="nav-item">
-						<svg aria-label="Search" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Search</title>
-							<path d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="16.511" x2="22" y1="16.511" y2="22"></line></svg>
-						<span className="text">Search</span>
-					</div>
-				</NavLink>
+				<div className="nav-item" onClick={() => { onSearchClick(); closeMoreMenu(); }}>
+					<svg aria-label="Search" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Search</title>
+						<path d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="16.511" x2="22" y1="16.511" y2="22"></line></svg>
+					<span className="text">Search</span>
+				</div>
 				<NavLink to="explore" onClick={closeMoreMenu}>
 					<div className="nav-item">
 						<svg aria-label="Explore" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Explore</title>
@@ -195,10 +193,7 @@ export function AppHeader({ onCreatePostClick }) {
 							<span className="text">Also from Meta</span>
 						</div>
 					</NavLink>
-
 				</div>
-
-
 
 				{user?.isAdmin && <NavLink to="/admin">Admin</NavLink>}
 
