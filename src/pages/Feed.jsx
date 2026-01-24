@@ -1,53 +1,54 @@
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
-	addPostComment,
 	addPostLike,
 	loadPosts,
 	loadPost,
 } from '../store/actions/post.actions';
 import { SvgIcon } from '../cmps/SvgIcon';
-import { useState } from 'react';
 import { Modal } from '../cmps/Modal';
-import { postService } from '../services/post';
-import { userService } from '../services/user'; // fix import path -guy
+import { userService } from '../services/user';
 import {
 	showErrorMsg,
 	showSuccessMsg,
 	showGeneralMsg,
 } from '../services/event-bus.service';
-import { PostWithComments } from '../cmps/PostWithComments';
-import { store } from '../store/store';
 import { checkIsLiked } from '../services/util.service';
 import { updateUser } from '../store/actions/user.actions';
+import { PostDetailsContent } from '../cmps/PostDetailsContent';
 
 export function Feed() {
 	const posts = useSelector((storeState) => storeState.postModule.posts);
+	const post = useSelector((storeState) => storeState.postModule.post);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modalType, setModalType] = useState('menu'); // 'menu' or 'comments'
+	const [modalType, setModalType] = useState('menu');
 	const [selectedPost, setSelectedPost] = useState(null);
+	const [selectedPostIndex, setSelectedPostIndex] = useState(null);
 
 	const loggedInUser = userService.getLoggedinUser();
-	console.log('loggedInUser:', loggedInUser);
+	// console.log('loggedInUser:', loggedInUser);
+
 	useEffect(() => {
 		loadPosts();
 	}, []);
 
-	console.log('posts:', posts);
+	// console.log('posts:', posts);
 	const navigate = useNavigate();
 
 	// Function to open comments modal
-	const handleOpenComments = async (postId) => {
+	const handleOpenComments = async (postId, index) => {
 		setModalType('comments');
+		setSelectedPostIndex(index);
 		await loadPost(postId);
 		setIsModalOpen(true);
 	};
 
 	// Function to open menu modal
-	function handleOpenMenu(post) {
+	function handleOpenMenu(post, index) {
 		setSelectedPost(post);
+		setSelectedPostIndex(index);
 		setModalType('menu');
 		setIsModalOpen(true);
 	}
@@ -55,7 +56,8 @@ export function Feed() {
 	function handleCloseModal() {
 		setIsModalOpen(false);
 		setModalType('menu');
-		setSelectedPost(null); // Clear selected post
+		setSelectedPost(null);
+		setSelectedPostIndex(null);
 	}
 
 	function handleReportPost(user) {
@@ -63,10 +65,12 @@ export function Feed() {
 		handleCloseModal();
 	}
 
-	// function handleGoToPost(postId) {
-	// 	setModalType('comments');
-	// 	loadPost(postId);
-	// }
+	async function handleNavigate(newIndex) {
+		if (newIndex >= 0 && newIndex < posts.length) {
+			setSelectedPostIndex(newIndex);
+			await loadPost(posts[newIndex]._id);
+		}
+	}
 
 	async function followUser(userId) {
 		const updates = {
@@ -94,59 +98,61 @@ export function Feed() {
 		<section className="home">
 			<section className="feed-grid-container">
 				{posts &&
-					posts.map((post) => {
-						const isLiked = checkIsLiked(post, loggedInUser);
+					posts.map((feedPost, index) => {
+						const isLiked = checkIsLiked(feedPost, loggedInUser);
 
 						return (
-							<article key={post._id} className="post-article flex row">
+							<article key={feedPost._id} className="post-article flex row">
 								<div className="post-header">
-									<img className="post-profile-img" src={post.by.imgUrl} />
-									<h4 onClick={() => navigate(`/user/${post.by._id}`)}>
-										{post.by.fullname}
+									<img className="post-profile-img" src={feedPost.by.imgUrl} />
+									<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
+										{feedPost.by.fullname}
 									</h4>
 									<div>
-										{loggedInUser && loggedInUser.following && !loggedInUser.following.includes(post.by._id) && (
-											<span onClick={() => followUser(post.by._id)}>
-												Follow
-											</span>
-										)}
+										{loggedInUser &&
+											loggedInUser.following &&
+											!loggedInUser.following.includes(feedPost.by._id) && (
+												<span onClick={() => followUser(feedPost.by._id)}>
+													Follow
+												</span>
+											)}
 										<SvgIcon
 											iconName="postDots"
 											className="icon"
-											onClick={() => handleOpenMenu(post)}
+											onClick={() => handleOpenMenu(feedPost, index)}
 										/>
 									</div>
 								</div>
 
-								<img className="post-img" src={post.imgUrl} />
+								<img className="post-img" src={feedPost.imgUrl} />
 
 								<div className="post-actions">
 									<SvgIcon
 										iconName={isLiked ? 'likeFilled' : 'like'}
 										fill={isLiked ? '#ff3040' : 'currentColor'}
-										onClick={() => addPostLike(post._id)}
+										onClick={() => addPostLike(feedPost._id)}
 									/>
-									<span>{post.likedBy.length}</span>
+									<span>{feedPost.likedBy.length}</span>
 
 									<SvgIcon
 										iconName="comment"
-										onClick={() => handleOpenComments(post._id)}
+										onClick={() => handleOpenComments(feedPost._id, index)}
 									/>
-									<span>{post.comments.length}</span>
+									<span>{feedPost.comments.length}</span>
 									<div className="bookmark-icon">
 										<SvgIcon
 											iconName={
-												loggedInUser?.savedPostIds?.includes(post._id)
+												loggedInUser?.savedPostIds?.includes(feedPost._id)
 													? 'bookmarkFilled'
 													: 'bookmark'
 											}
-											onClick={() => toggleBookmark(post._id)}
+											onClick={() => toggleBookmark(feedPost._id)}
 										/>
 									</div>
 								</div>
 								<div className="post-desc">
-									<h4 onClick={() => navigate(`/user/${post.by._id}`)}>
-										{post.by.fullname}: <span>{post.txt}</span>
+									<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
+										{feedPost.by.fullname}: <span>{feedPost.txt}</span>
 									</h4>
 								</div>
 							</article>
@@ -171,7 +177,7 @@ export function Feed() {
 							className="modal-item"
 							onClick={() => {
 								handleCloseModal();
-								handleOpenComments(selectedPost._id);
+								handleOpenComments(selectedPost._id, selectedPostIndex);
 							}}
 						>
 							Go to post
@@ -183,7 +189,6 @@ export function Feed() {
 									await navigator.clipboard.writeText(
 										`${window.location.origin}/post/${selectedPost._id}`
 									);
-									// Optional: Show a success message
 									showGeneralMsg('Link copied to clipboard');
 									handleCloseModal();
 								} catch (err) {
@@ -207,8 +212,13 @@ export function Feed() {
 						</div>
 					</>
 				)}
-				{modalType === 'comments' && (
-					<PostWithComments onClose={handleCloseModal} />
+				{modalType === 'comments' && post && (
+					<PostDetailsContent
+						post={post}
+						// posts={posts}
+						// currentIndex={selectedPostIndex}
+						// onNavigate={handleNavigate}
+					/>
 				)}
 			</Modal>
 		</section>

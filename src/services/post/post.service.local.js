@@ -10,7 +10,9 @@ export const postService = {
 	save,
 	remove,
 	addPostComment,
+	deletePostComment,
 	togglePostLike,
+	toggleLikeComment,
 };
 window.cs = postService;
 
@@ -95,13 +97,23 @@ async function addPostComment(postId, txt) {
 
 	const comment = {
 		id: makeId(),
+		date: new Date().toTimeString().slice(0, 5),
 		by: userService.getLoggedinUser(),
 		txt,
+		likedBy: [],
 	};
 	post.comments.push(comment);
 	await storageService.put(STORAGE_KEY, post);
 
 	return { postId, comment };
+}
+
+async function deletePostComment(postId, commentId) {
+	const post = await getById(postId);
+	post.comments = post.comments.filter((c) => c.id !== commentId);
+	// Save the updated post back
+	await storageService.put(STORAGE_KEY, post);
+	return { postId, commentId };
 }
 
 async function togglePostLike(postId) {
@@ -130,7 +142,31 @@ async function togglePostLike(postId) {
 	await storageService.put(STORAGE_KEY, post);
 	return post;
 }
+async function toggleLikeComment(postId, commentId, userId) {
+	const post = await getById(postId);
 
+	// Find the comment
+	const comment = post.comments.find((c) => c.id === commentId);
+	if (!comment) throw new Error('Comment not found');
+
+	// Initialize likedBy array if it doesn't exist
+	if (!comment.likedBy) comment.likedBy = [];
+
+	// Toggle like
+	const likedIndex = comment.likedBy.indexOf(userId);
+	if (likedIndex > -1) {
+		// Unlike
+		comment.likedBy.splice(likedIndex, 1);
+	} else {
+		// Like
+		comment.likedBy.push(userId);
+	}
+
+	// Save the updated post
+	await storageService.put(STORAGE_KEY, post);
+
+	return { postId, commentId, userId, isLiked: likedIndex === -1 };
+}
 export function _createPosts() {
 	const postsFromStorage = localStorage.getItem(STORAGE_KEY);
 	if (!postsFromStorage) {

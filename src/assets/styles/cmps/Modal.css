@@ -13,7 +13,7 @@
 }
 
 .modal-menu {
-	bottom: 25vh;
+	bottom: 45%;
 	left: 50%;
 	transform: translateX(-59%);
 	width: 90%;
@@ -34,16 +34,18 @@
 	overflow: hidden;
 }
 
+/* COMMENTS MODAL - INSTAGRAM STYLE */
 .modal-comments {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 60vw;
-	max-width: 1200px;
-	max-height: 90vh;
-	background: var(--inst-popup-background);
-	border-radius: 0;
-	overflow: hidden;
+	width: 80vw;
+	max-width: 1400px;
+	height: 80vh;
+	max-height: 700px;
+	background: transparent;
+	border-radius: 8px;
+	overflow: visible;
 }
 
 /* MODAL ITEMS */
@@ -60,7 +62,7 @@
 }
 
 .modal-item.danger {
-	color: var(--inst-error);
+	color: red;
 	font-weight: 600;
 }
 

@@ -24,7 +24,6 @@
 .post-list-container {
 	width: 100%;
 	border-top: 1px solid var(--inst-more-dropdown-hover);
-
 }
 
 /* Explore grid - with big items */
@@ -99,9 +98,13 @@ Prevent full-width posts in profile grid */
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
+	aspect-ratio: 1;
+	cursor: pointer;
+	overflow: hidden;
 }
 
-.post-preview>img {
+.post-preview > img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
