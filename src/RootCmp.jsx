@@ -21,6 +21,7 @@ import { AppHeader } from './cmps/AppHeader';
 import { AppFooter } from './cmps/AppFooter';
 import { UserMsg } from './cmps/UserMsg.jsx';
 import { CreatePost } from './cmps/CreatePost.jsx';
+import { Search } from './cmps/Search.jsx';
 
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
@@ -30,11 +31,15 @@ export function RootCmp() {
 
 	const loggedInUser = useSelector((storeState) => storeState.userModule.user)
 	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
+	const [isSearchOpen, setIsSearchOpen] = useState(false)
 
 	return (
 		<div className="main-container grid grid-rows-3">
 			<div className='header-container'>
-				<AppHeader onCreatePostClick={() => setIsCreatePostOpen(true)} />
+				<AppHeader
+					onCreatePostClick={() => setIsCreatePostOpen(true)}
+					onSearchClick={() => setIsSearchOpen(true)}
+				/>
 			</div>
 			<UserMsg />
 			<main>
@@ -43,6 +48,7 @@ export function RootCmp() {
 						loggedInUser ? <HomePage />
 							: <Navigate to="/auth/login" replace />
 					}>
+
 						{/* <Route path="/" element={<HomePage />}> */}
 						<Route index element={<Feed />} />
 						<Route path="reels" element={<ReelsIndex />} />
@@ -67,6 +73,7 @@ export function RootCmp() {
 			</main>
 
 			{isCreatePostOpen && <CreatePost onClose={() => setIsCreatePostOpen(false)} />}
+			{isSearchOpen && <Search onClose={() => setIsSearchOpen(false)} />}
 		</div>
 	);
 }
