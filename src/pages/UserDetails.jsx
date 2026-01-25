@@ -29,6 +29,8 @@ import { loadPosts } from '../store/actions/post.actions';
 // for follow functionality
 import { updateUser } from '../store/actions/user.actions';
 
+
+
 export function UserDetails() {
 	//get user id from params
 	const params = useParams();
@@ -229,9 +231,15 @@ export function UserDetails() {
 								<p>{user?.followers?.length || 0} {user?.followers?.length === 1 ? 'follower' : 'followers'}</p>
 								<p>{user?.following?.length || 0} following</p>
 							</div>
+							<div className="user-bio">
+								<div className="bio-header">
+									<p>{user.bio}</p>
+								</div>
+
+							</div>
+
 						</div>
 					</div>
-
 
 					{loggedInUser._id === user._id ? (
 						<section className="btns-section">

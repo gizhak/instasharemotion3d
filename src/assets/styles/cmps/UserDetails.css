@@ -143,14 +143,14 @@
 	}
 
 	p {
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 400;
 		margin-top: 10px;
 		color: var(--inst-text);
 	}
 
 	h5 {
-		font-size: 18px;
+		font-size: 20px;
 		font-weight: 600;
 		color: var(--inst-text);
 		font-weight: bold;
@@ -176,6 +176,7 @@
 		svg:hover {
 			color: var(--inst-text);
 		}
+
 	}
 }
 
