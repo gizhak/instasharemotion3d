@@ -15,10 +15,9 @@
 	/* margin-inline-end: auto; */
 	/* margin-inline-start: 20px; */
 	background-color: var(--inst-popup-background);
-
 	/* Slide up from bottom instead of from side */
 	translate: 0 150%;
-	color: white;
+	color: var(--inst-text);
 	font-size: 0.9em;
 
 	opacity: 0;
