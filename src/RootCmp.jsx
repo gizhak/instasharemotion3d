@@ -25,6 +25,7 @@ import { Search } from './cmps/Search.jsx';
 
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
+import { GalaxyMode } from './cmps/GalaxyMode';
 // import { EditUser } from './cmps/EditUser.jsx';
 
 function CreatePostWrapper() {
@@ -37,6 +38,7 @@ export function RootCmp() {
 	const loggedInUser = useSelector((storeState) => storeState.userModule.user)
 	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
 	const [isSearchOpen, setIsSearchOpen] = useState(false)
+	const [isGalaxyModeOpen, setIsGalaxyModeOpen] = useState(false)
 
 	return (
 		<div className="main-container grid grid-rows-3">
@@ -44,6 +46,7 @@ export function RootCmp() {
 				<AppHeader
 					onCreatePostClick={() => setIsCreatePostOpen(true)}
 					onSearchClick={() => setIsSearchOpen(true)}
+					onGalaxyModeClick={() => setIsGalaxyModeOpen(true)}
 				/>
 			</div>
 			<UserMsg />
@@ -58,7 +61,7 @@ export function RootCmp() {
 						<Route index element={<Feed />} />
 						<Route path="reels" element={<ReelsIndex />} />
 						<Route path="explore" element={<PostIndex />} />
-						<Route path="user/:id" element={<UserDetails />} />
+						<Route path="user/:id" element={<UserDetails onGalaxyModeClick={() => setIsGalaxyModeOpen(true)} />} />
 						<Route path="chat" element={<ChatApp />} />
 						<Route path="review" element={<ReviewIndex />} />
 						<Route path="create" element={<CreatePostWrapper />} />
@@ -79,6 +82,7 @@ export function RootCmp() {
 
 			{isCreatePostOpen && <CreatePost onClose={() => setIsCreatePostOpen(false)} />}
 			{isSearchOpen && <Search onClose={() => setIsSearchOpen(false)} />}
+			<GalaxyMode isOpen={isGalaxyModeOpen} onClose={() => setIsGalaxyModeOpen(false)} />
 		</div>
 	);
 }

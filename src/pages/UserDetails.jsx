@@ -33,7 +33,7 @@ import { CreatePost } from '../cmps/CreatePost';
 
 
 
-export function UserDetails() {
+export function UserDetails({ onGalaxyModeClick }) {
 	//get user id from params
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
@@ -286,7 +286,7 @@ export function UserDetails() {
 							<button className="edit-btn" onClick={() => navigate(`/setting`)}>
 								Edit profile
 							</button>
-							<button className="archive-btn">View archive</button>
+							<button className="archive-btn" onClick={onGalaxyModeClick}>View archive</button>
 						</section>
 					) : (
 						<section className="btns-section">

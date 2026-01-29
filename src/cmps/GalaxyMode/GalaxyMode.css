@@ -1,0 +1,666 @@
+.galaxy-mode-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    background: #000;
+    overflow: hidden;
+}
+
+.galaxy-canvas-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Close button */
+.galaxy-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10001;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.galaxy-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.galaxy-close-btn svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+/* Webcam preview */
+.webcam-preview {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+}
+
+.webcam-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.webcam-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+    pointer-events: none;
+}
+
+.webcam-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 12px;
+}
+
+/* Gesture status */
+.gesture-status {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+    border-color: rgba(136, 68, 255, 0.5);
+    background: rgba(136, 68, 255, 0.2);
+    color: white;
+}
+
+.status-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+/* Welcome overlay - matches app style */
+.welcome-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.welcome-content {
+    position: relative;
+    text-align: left;
+    color: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+}
+
+.welcome-header {
+    margin-bottom: 32px;
+}
+
+.welcome-content h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #f5f5f5;
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: #a8a8a8;
+    margin: 0;
+}
+
+.welcome-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 24px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #363636;
+    text-align: left;
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}
+
+.feature-item.camera-notice {
+    background: #262626;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    border-bottom: none;
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feature-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: #e0e0e0;
+}
+
+.feature-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #f5f5f5;
+}
+
+.feature-text p {
+    font-size: 12px;
+    color: #a8a8a8;
+    margin: 0;
+}
+
+.welcome-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: #0095f6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.start-btn:hover {
+    background: #1aa1f7;
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #f5f5f5;
+    background: transparent;
+    border: 1px solid #363636;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+    background: #262626;
+}
+
+.welcome-note {
+    font-size: 12px;
+    color: #737373;
+    margin: 0;
+    text-align: center;
+}
+
+/* Selected photo preview */
+.selected-photo-preview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(136, 68, 255, 0.5);
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.selected-photo-preview img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+}
+
+.photo-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    font-size: 14px;
+}
+
+/* Photo Viewer Overlay - Full screen carousel */
+.photo-viewer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10003;
+    animation: fadeIn 0.3s ease;
+}
+
+.photo-viewer-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10004;
+}
+
+.photo-viewer-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.photo-viewer-close svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.photo-viewer-content {
+    position: relative;
+    max-width: 85vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.photo-viewer-content img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 80px rgba(136, 68, 255, 0.3);
+}
+
+.photo-viewer-content .photo-caption {
+    position: relative;
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 0 0 8px 8px;
+    margin-top: -8px;
+}
+
+.photo-counter {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+}
+
+/* Navigation buttons */
+.photo-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10004;
+}
+
+.photo-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.photo-nav-btn svg {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.photo-nav-btn.prev {
+    left: 20px;
+}
+
+.photo-nav-btn.next {
+    right: 20px;
+}
+
+/* Swipe hint */
+.swipe-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(136, 68, 255, 0.3);
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    animation: pulse 2s infinite;
+}
+
+.swipe-hint svg {
+    flex-shrink: 0;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Hand warning styles */
+.hand-warning {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10005;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: warningPulse 1.5s ease-in-out infinite;
+}
+
+.hand-warning.hand-out {
+    background: rgba(255, 59, 48, 0.85);
+    border: 2px solid rgba(255, 59, 48, 0.9);
+    color: white;
+    box-shadow: 0 4px 20px rgba(255, 59, 48, 0.4);
+}
+
+.hand-warning.hand-edge {
+    background: rgba(255, 149, 0, 0.85);
+    border: 2px solid rgba(255, 149, 0, 0.9);
+    color: white;
+    box-shadow: 0 4px 20px rgba(255, 149, 0, 0.4);
+}
+
+.hand-warning .warning-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.hand-warning.hand-edge.left .warning-icon {
+    transform: rotate(180deg);
+}
+
+.hand-warning.hand-edge.right .warning-icon {
+    transform: rotate(0deg);
+}
+
+.hand-warning.hand-edge.top .warning-icon {
+    transform: rotate(90deg);
+}
+
+.hand-warning.hand-edge.bottom .warning-icon {
+    transform: rotate(-90deg);
+}
+
+@keyframes warningPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        opacity: 0.85;
+        transform: translateX(-50%) scale(1.02);
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .webcam-preview {
+        width: 140px;
+        height: 105px;
+        bottom: 80px;
+        right: 10px;
+    }
+
+    .instruction-items {
+        grid-template-columns: 1fr;
+    }
+
+    .instructions-content {
+        padding: 20px;
+    }
+
+    .instructions-content h2 {
+        font-size: 24px;
+    }
+
+    .instruction-item {
+        padding: 15px;
+    }
+
+    .instruction-icon {
+        font-size: 28px;
+    }
+
+    .status-indicator {
+        padding: 10px 18px;
+        font-size: 12px;
+    }
+
+    .status-icon {
+        font-size: 20px;
+    }
+
+    .photo-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .photo-nav-btn.prev {
+        left: 10px;
+    }
+
+    .photo-nav-btn.next {
+        right: 10px;
+    }
+
+    .photo-nav-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .photo-viewer-content img {
+        max-height: 60vh;
+    }
+
+    .swipe-hint {
+        bottom: 100px;
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+
+    .hand-warning {
+        top: 70px;
+        padding: 10px 18px;
+        font-size: 12px;
+    }
+
+    .hand-warning .warning-icon {
+        font-size: 20px;
+    }
+
+    /* Welcome screen responsive */
+    .welcome-content {
+        margin: 20px;
+        padding: 24px 20px;
+        max-width: calc(100% - 40px);
+    }
+
+    .welcome-content h1 {
+        font-size: 20px;
+    }
+
+    .welcome-subtitle {
+        font-size: 13px;
+    }
+
+    .feature-item {
+        padding: 12px 0;
+        gap: 12px;
+    }
+
+    .feature-item.camera-notice {
+        padding: 12px 14px;
+    }
+
+    .feature-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .feature-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .feature-text strong {
+        font-size: 13px;
+    }
+
+    .feature-text p {
+        font-size: 11px;
+    }
+
+    .start-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .cancel-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .welcome-note {
+        font-size: 11px;
+    }
+}
