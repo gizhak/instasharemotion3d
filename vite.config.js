@@ -25,6 +25,8 @@ export default defineConfig({
 	// }
 	preview: {
 		host: '0.0.0.0',
-		port: process.env.PORT || 4173
+		port: process.env.PORT || 4173,
+		strictPort: true,
+		allowedHosts: ['instasharemotion3d.onrender.com', '.onrender.com']
 	}
 })
