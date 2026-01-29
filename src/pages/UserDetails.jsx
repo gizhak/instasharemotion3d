@@ -309,7 +309,7 @@ export function UserDetails({ onGalaxyModeClick }) {
 						</div>
 					)}
 					<div className="suggestions-users">
-						{otherUsers.map((u) => (
+						{otherUsers && otherUsers.map((u) => (
 							<div className="suggestion-user" key={u._id} onClick={() => handleNavigate(u._id)}>
 								<img className="suggestion-user-img" src={u.imgUrl} />
 								<h4>

@@ -54,7 +54,7 @@ export function Login() {
                         <h2>Remove profiles from this browser</h2>
 
                         <div className="remove-users-list">
-                            {users.map(user => (
+                            {users && users.map(user => (
                                 <div key={user._id} className="remove-user-item">
                                     <img src={user.imgUrl} alt={user.fullname} />
                                     <div className="user-info">
@@ -126,7 +126,7 @@ export function Login() {
                 </div>
 
                 <div className="users-list">
-                    {users.map(user => (
+                    {users && users.map(user => (
                         <div
                             key={user._id}
                             className="user-login-item"
