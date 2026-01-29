@@ -1,0 +1,22 @@
+{
+  "name": "instasharemotion3d",
+  "version": "1.0.0",
+  "description": "A 3D motion sharing platform for creating and sharing interactive 3D animations",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "3d",
+    "motion",
+    "animation",
+    "threejs",
+    "webgl"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}

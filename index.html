@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaShareMotion3D - Share Your 3D Animations</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>InstaShareMotion3D</h1>
+        <p>Create and share interactive 3D motion animations</p>
+    </header>
+
+    <main>
+        <div id="canvas-container">
+            <canvas id="motion-canvas"></canvas>
+        </div>
+        
+        <div id="controls">
+            <h2>Controls</h2>
+            <button id="play-btn">Play</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+            <div class="slider-container">
+                <label for="speed-slider">Animation Speed:</label>
+                <input type="range" id="speed-slider" min="0.1" max="3" step="0.1" value="1">
+                <span id="speed-value">1.0x</span>
+            </div>
+        </div>
+
+        <div id="info">
+            <h2>About</h2>
+            <p>This is a demo 3D motion animation viewer built with Three.js. Use the controls to interact with the animation.</p>
+            <ul>
+                <li>Drag to rotate the camera</li>
+                <li>Scroll to zoom in/out</li>
+                <li>Use the control panel to adjust animation</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 InstaShareMotion3D</p>
+    </footer>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
