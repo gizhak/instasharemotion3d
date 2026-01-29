@@ -34,20 +34,22 @@ git clone https://github.com/gizhak/instasharemotion3d.git
 cd instasharemotion3d
 ```
 
-2. Start the development server:
-```bash
-npm start
-```
-
-Or use Python directly:
+2. Start a local web server. You can use Python's built-in HTTP server:
 ```bash
 python3 -m http.server 8000
+```
+
+Or if you have npm installed, you can use the npm script:
+```bash
+npm start
 ```
 
 3. Open your browser and navigate to:
 ```
 http://localhost:8000
 ```
+
+**Note**: This project uses CDN-hosted Three.js library via import maps, so no npm package installation is required. The package.json file is included only for project metadata and convenience scripts.
 
 ## Usage
 

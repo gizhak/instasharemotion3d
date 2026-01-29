@@ -88,6 +88,11 @@ button:hover {
     background: #5568d3;
 }
 
+button:focus {
+    outline: 3px solid #764ba2;
+    outline-offset: 2px;
+}
+
 button:active {
     transform: translateY(1px);
 }

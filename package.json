@@ -15,8 +15,5 @@
     "webgl"
   ],
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "three": "^0.160.0"
-  }
+  "license": "MIT"
 }

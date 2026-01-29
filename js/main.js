@@ -96,15 +96,19 @@ const resetBtn = document.getElementById('reset-btn');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
 
-playBtn.addEventListener('click', () => {
+if (!playBtn || !pauseBtn || !resetBtn || !speedSlider || !speedValue) {
+    console.error('One or more control elements not found in the DOM');
+}
+
+playBtn?.addEventListener('click', () => {
     isAnimating = true;
 });
 
-pauseBtn.addEventListener('click', () => {
+pauseBtn?.addEventListener('click', () => {
     isAnimating = false;
 });
 
-resetBtn.addEventListener('click', () => {
+resetBtn?.addEventListener('click', () => {
     cube.rotation.set(0, 0, 0);
     sphere.position.set(2, 0, 0);
     sphere.rotation.set(0, 0, 0);
@@ -114,20 +118,26 @@ resetBtn.addEventListener('click', () => {
     controls.reset();
 });
 
-speedSlider.addEventListener('input', (e) => {
+speedSlider?.addEventListener('input', (e) => {
     animationSpeed = parseFloat(e.target.value);
-    speedValue.textContent = `${animationSpeed.toFixed(1)}x`;
+    const valueText = `${animationSpeed.toFixed(1)}x`;
+    if (speedValue) speedValue.textContent = valueText;
+    if (speedSlider) speedSlider.setAttribute('aria-valuetext', `${valueText} speed`);
 });
 
-// Handle window resize
+// Handle window resize with debouncing
+let resizeTimeout;
 window.addEventListener('resize', () => {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    
-    renderer.setSize(width, height);
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        
+        renderer.setSize(width, height);
+    }, 100);
 });
 
 // Start animation
