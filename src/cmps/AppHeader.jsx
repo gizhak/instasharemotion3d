@@ -4,10 +4,37 @@ import { useSelector } from 'react-redux';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service';
 import { logout } from '../store/actions/user.actions';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-// Icons
-import { FaInstagram } from "react-icons/fa6";
+// PixiGram Logo Component - switches between dark/light mode
+const PixiGramLogo = ({ className }) => {
+	const [isDarkMode, setIsDarkMode] = useState(true);
+
+	useEffect(() => {
+		// Check initial theme
+		const checkTheme = () => {
+			const theme = document.documentElement.getAttribute('data-theme');
+			setIsDarkMode(theme !== 'light');
+		};
+
+		checkTheme();
+
+		// Watch for theme changes
+		const observer = new MutationObserver(checkTheme);
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+		return () => observer.disconnect();
+	}, []);
+
+	return (
+		<img
+			src={isDarkMode ? "/img/pixigram-icon.svg" : "/img/pixigram-icon-light.svg"}
+			alt="PixiGram"
+			className={className}
+			style={{ width: '48px', height: '48px' }}
+		/>
+	);
+};
 
 export function AppHeader({ onCreatePostClick, onSearchClick, onGalaxyModeClick }) {
 	const user = useSelector((storeState) => storeState.userModule.user);
@@ -32,7 +59,7 @@ export function AppHeader({ onCreatePostClick, onSearchClick, onGalaxyModeClick 
 			<header className="app-header full">
 				<nav className="nav-bar">
 					<NavLink to="/" className="logo">
-						<FaInstagram className="icon" />
+						<PixiGramLogo className="icon" />
 					</NavLink>
 					<NavLink to="auth/login">
 						<div className="nav-item">
@@ -76,7 +103,7 @@ export function AppHeader({ onCreatePostClick, onSearchClick, onGalaxyModeClick 
 		<header className={`app-header full ${isMoreMenuOpen ? 'menu-open' : ''}`}>
 			<nav className="nav-bar">
 				<NavLink to="/" className="logo" onClick={closeMoreMenu}>
-					<FaInstagram className="icon" />
+					<PixiGramLogo className="icon" />
 					<span className="text"></span>
 				</NavLink>
 				<NavLink to="/" onClick={closeMoreMenu}>
