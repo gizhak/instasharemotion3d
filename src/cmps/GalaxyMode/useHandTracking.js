@@ -9,6 +9,7 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
     const [swipeDirection, setSwipeDirection] = useState(null); // 'left', 'right', null
     const [isHandInFrame, setIsHandInFrame] = useState(false);
     const [handEdgeWarning, setHandEdgeWarning] = useState(null); // 'left', 'right', 'top', 'bottom', null
+    const [debugInfo, setDebugInfo] = useState({ delegate: null, error: null }); // For debugging
 
     const gestureRecognizerRef = useRef(null);
     const animationFrameRef = useRef(null);
@@ -146,14 +147,32 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
                     'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
                 );
 
-                const recognizer = await GestureRecognizer.createFromOptions(vision, {
-                    baseOptions: {
-                        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
-                        delegate: 'GPU'
-                    },
-                    runningMode: 'VIDEO',
-                    numHands: 1
-                });
+                // Try GPU first, fallback to CPU if it fails (for Android compatibility)
+                let recognizer;
+                try {
+                    recognizer = await GestureRecognizer.createFromOptions(vision, {
+                        baseOptions: {
+                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
+                            delegate: 'GPU'
+                        },
+                        runningMode: 'VIDEO',
+                        numHands: 1
+                    });
+                    console.log('Gesture recognizer initialized with GPU');
+                    setDebugInfo({ delegate: 'GPU', error: null });
+                } catch (gpuError) {
+                    console.warn('GPU delegate failed, falling back to CPU:', gpuError);
+                    setDebugInfo({ delegate: 'CPU (GPU failed)', error: gpuError.message });
+                    recognizer = await GestureRecognizer.createFromOptions(vision, {
+                        baseOptions: {
+                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
+                            delegate: 'CPU'
+                        },
+                        runningMode: 'VIDEO',
+                        numHands: 1
+                    });
+                    console.log('Gesture recognizer initialized with CPU');
+                }
 
                 if (mounted) {
                     gestureRecognizerRef.current = recognizer;
@@ -193,12 +212,21 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
             if (video.currentTime !== lastVideoTimeRef.current && video.readyState >= 2) {
                 lastVideoTimeRef.current = video.currentTime;
 
+                let results;
                 try {
-                    const results = gestureRecognizerRef.current.recognizeForVideo(
+                    results = gestureRecognizerRef.current.recognizeForVideo(
                         video,
                         performance.now()
                     );
+                } catch (recognitionError) {
+                    console.warn('Recognition error:', recognitionError);
+                    if (mounted) {
+                        animationFrameRef.current = requestAnimationFrame(predictWebcam);
+                    }
+                    return;
+                }
 
+                try {
                     // Clear canvas
                     if (canvasRef.current) {
                         const ctx = canvasRef.current.getContext('2d');
@@ -293,8 +321,8 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
                         setFingerCount(0);
                         lastVictoryPositionRef.current = null;
                     }
-                } catch (error) {
-                    // Silently handle recognition errors
+                } catch (processingError) {
+                    console.warn('Processing error:', processingError);
                 }
             }
 
@@ -326,6 +354,7 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
         fingerCount,
         swipeDirection,
         isHandInFrame,
-        handEdgeWarning
+        handEdgeWarning,
+        debugInfo
     };
 }

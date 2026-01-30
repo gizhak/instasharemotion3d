@@ -14,7 +14,7 @@ export function GalaxyMode({ isOpen, onClose }) {
     const [cameraPermissionGranted, setCameraPermissionGranted] = useState(false);
     const [isPhotoViewMode, setIsPhotoViewMode] = useState(false);
 
-    const { gesture, handPosition, isTracking, fingerCount, swipeDirection, isHandInFrame, handEdgeWarning } = useHandTracking(
+    const { gesture, handPosition, isTracking, fingerCount, swipeDirection, isHandInFrame, handEdgeWarning, debugInfo } = useHandTracking(
         videoRef,
         canvasRef,
         isOpen && cameraPermissionGranted
@@ -234,6 +234,12 @@ export function GalaxyMode({ isOpen, onClose }) {
                         {!isTracking && (
                             <div className="webcam-loading">
                                 <span>Loading camera...</span>
+                            </div>
+                        )}
+                        {/* Debug info - shows which delegate is being used */}
+                        {debugInfo?.delegate && (
+                            <div className="debug-info">
+                                {debugInfo.delegate}
                             </div>
                         )}
                     </div>
