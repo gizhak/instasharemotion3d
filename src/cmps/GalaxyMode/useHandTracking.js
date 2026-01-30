@@ -9,7 +9,9 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
     const [swipeDirection, setSwipeDirection] = useState(null); // 'left', 'right', null
     const [isHandInFrame, setIsHandInFrame] = useState(false);
     const [handEdgeWarning, setHandEdgeWarning] = useState(null); // 'left', 'right', 'top', 'bottom', null
-    const [debugInfo, setDebugInfo] = useState({ delegate: null, error: null }); // For debugging
+    const [debugInfo, setDebugInfo] = useState({ delegate: null, error: null, fps: 0, lastDetection: null }); // For debugging
+    const frameCountRef = useRef(0);
+    const lastFpsUpdateRef = useRef(Date.now());
 
     const gestureRecognizerRef = useRef(null);
     const animationFrameRef = useRef(null);
@@ -185,20 +187,47 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
 
         const startCamera = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'user', width: 640, height: 480 }
-                });
+                // Try different camera constraints for better mobile compatibility
+                const constraints = {
+                    video: {
+                        facingMode: 'user',
+                        width: { ideal: 640, max: 1280 },
+                        height: { ideal: 480, max: 720 },
+                        frameRate: { ideal: 30, max: 30 }
+                    }
+                };
+
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
                 if (videoRef.current && mounted) {
                     videoRef.current.srcObject = stream;
+
+                    // Get actual video settings for debugging
+                    const videoTrack = stream.getVideoTracks()[0];
+                    const settings = videoTrack.getSettings();
+                    console.log('Camera settings:', settings);
+                    setDebugInfo(prev => ({
+                        ...prev,
+                        resolution: `${settings.width}x${settings.height}`
+                    }));
+
                     videoRef.current.onloadedmetadata = () => {
-                        videoRef.current.play();
-                        setIsTracking(true);
-                        predictWebcam();
+                        videoRef.current.play().then(() => {
+                            console.log('Video playing, dimensions:', videoRef.current.videoWidth, 'x', videoRef.current.videoHeight);
+                            // Wait a bit for video to stabilize on mobile
+                            setTimeout(() => {
+                                setIsTracking(true);
+                                predictWebcam();
+                            }, 500);
+                        }).catch(err => {
+                            console.error('Video play error:', err);
+                            setDebugInfo(prev => ({ ...prev, error: 'Play failed' }));
+                        });
                     };
                 }
             } catch (error) {
                 console.error('Failed to access camera:', error);
+                setDebugInfo(prev => ({ ...prev, error: error.message }));
             }
         };
 
@@ -218,8 +247,22 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
                         video,
                         performance.now()
                     );
+
+                    // Update FPS counter
+                    frameCountRef.current++;
+                    const now = Date.now();
+                    if (now - lastFpsUpdateRef.current >= 1000) {
+                        setDebugInfo(prev => ({
+                            ...prev,
+                            fps: frameCountRef.current,
+                            hasResults: results?.landmarks?.length > 0
+                        }));
+                        frameCountRef.current = 0;
+                        lastFpsUpdateRef.current = now;
+                    }
                 } catch (recognitionError) {
                     console.warn('Recognition error:', recognitionError);
+                    setDebugInfo(prev => ({ ...prev, error: 'Recognition failed' }));
                     if (mounted) {
                         animationFrameRef.current = requestAnimationFrame(predictWebcam);
                     }
