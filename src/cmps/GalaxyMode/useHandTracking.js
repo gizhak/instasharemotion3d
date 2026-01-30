@@ -149,31 +149,56 @@ export function useHandTracking(videoRef, canvasRef, enabled = true) {
                     'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
                 );
 
+                // Detect if mobile device
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                const isAndroid = /Android/i.test(navigator.userAgent);
+
                 // Try GPU first, fallback to CPU if it fails (for Android compatibility)
                 let recognizer;
+                const createRecognizer = async (delegate) => {
+                    return await GestureRecognizer.createFromOptions(vision, {
+                        baseOptions: {
+                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
+                            delegate: delegate
+                        },
+                        runningMode: 'VIDEO',
+                        numHands: 1,
+                        minHandDetectionConfidence: 0.3,  // Lower threshold for better detection
+                        minHandPresenceConfidence: 0.3,   // Lower threshold
+                        minTrackingConfidence: 0.3        // Lower threshold
+                    });
+                };
+
                 try {
-                    recognizer = await GestureRecognizer.createFromOptions(vision, {
-                        baseOptions: {
-                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
-                            delegate: 'GPU'
-                        },
-                        runningMode: 'VIDEO',
-                        numHands: 1
-                    });
-                    console.log('Gesture recognizer initialized with GPU');
-                    setDebugInfo({ delegate: 'GPU', error: null });
-                } catch (gpuError) {
-                    console.warn('GPU delegate failed, falling back to CPU:', gpuError);
-                    setDebugInfo({ delegate: 'CPU (GPU failed)', error: gpuError.message });
-                    recognizer = await GestureRecognizer.createFromOptions(vision, {
-                        baseOptions: {
-                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',
-                            delegate: 'CPU'
-                        },
-                        runningMode: 'VIDEO',
-                        numHands: 1
-                    });
-                    console.log('Gesture recognizer initialized with CPU');
+                    // On Android, try CPU first as it's often more reliable
+                    if (isAndroid) {
+                        try {
+                            recognizer = await createRecognizer('CPU');
+                            console.log('Android: Gesture recognizer initialized with CPU');
+                            setDebugInfo({ delegate: 'CPU (Android)', error: null });
+                        } catch (cpuError) {
+                            console.warn('CPU failed on Android, trying GPU:', cpuError);
+                            recognizer = await createRecognizer('GPU');
+                            console.log('Android: Gesture recognizer initialized with GPU');
+                            setDebugInfo({ delegate: 'GPU (Android)', error: null });
+                        }
+                    } else {
+                        // On other devices, try GPU first
+                        try {
+                            recognizer = await createRecognizer('GPU');
+                            console.log('Gesture recognizer initialized with GPU');
+                            setDebugInfo({ delegate: 'GPU', error: null });
+                        } catch (gpuError) {
+                            console.warn('GPU delegate failed, falling back to CPU:', gpuError);
+                            recognizer = await createRecognizer('CPU');
+                            console.log('Gesture recognizer initialized with CPU');
+                            setDebugInfo({ delegate: 'CPU', error: null });
+                        }
+                    }
+                } catch (error) {
+                    console.error('All delegates failed:', error);
+                    setDebugInfo({ delegate: 'FAILED', error: error.message });
+                    return;
                 }
 
                 if (mounted) {
