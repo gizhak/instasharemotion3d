@@ -240,6 +240,8 @@ export function GalaxyMode({ isOpen, onClose }) {
                         {debugInfo?.delegate && (
                             <div className="debug-info">
                                 {debugInfo.delegate}
+                                {debugInfo.fps ? ` | ${debugInfo.fps}fps` : ''}
+                                {debugInfo.resolution ? ` | ${debugInfo.resolution}` : ''}
                             </div>
                         )}
                     </div>
