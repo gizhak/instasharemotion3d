@@ -59,7 +59,7 @@ export function Login() {
                                     <img src={user.imgUrl} alt={user.fullname} />
                                     <div className="user-info">
                                         <span className="username">{user.fullname}</span>
-                                        <span className="app-name">InstaShare</span>
+                                        <span className="app-name">PixiGram</span>
                                     </div>
                                     <button
                                         className="remove-btn"
@@ -80,25 +80,14 @@ export function Login() {
 
             {/* Left Side - Hero Section */}
             <div className="login-hero">
-                <div className="instagram-logo">
-                    <svg aria-label="Instagram" fill="url(#instagram-gradient)" height="60" viewBox="0 0 24 24" width="60">
-                        <defs>
-                            <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#FFDC80" />
-                                <stop offset="50%" stopColor="#F56040" />
-                                <stop offset="100%" stopColor="#C13584" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M12 2.982c2.937 0 3.285.011 4.445.064 1.072.049 1.655.228 2.042.379.514.2.88.438 1.265.823.385.385.623.751.823 1.265.151.387.33.97.379 2.042.053 1.16.064 1.508.064 4.445s-.011 3.285-.064 4.445c-.049 1.072-.228 1.655-.379 2.042-.2.514-.438.88-.823 1.265a3.398 3.398 0 0 1-1.265.823c-.387.151-.97.33-2.042.379-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064c-1.072-.049-1.655-.228-2.042-.379a3.398 3.398 0 0 1-1.265-.823 3.398 3.398 0 0 1-.823-1.265c-.151-.387-.33-.97-.379-2.042-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445c.049-1.072.228-1.655.379-2.042.2-.514.438-.88.823-1.265a3.398 3.398 0 0 1 1.265-.823c.387-.151.97-.33 2.042-.379 1.16-.053 1.508-.064 4.445-.064M12 1c-2.987 0-3.362.013-4.535.066-1.171.054-1.97.24-2.67.512a5.391 5.391 0 0 0-1.949 1.268 5.391 5.391 0 0 0-1.268 1.949c-.272.7-.458 1.499-.512 2.67C1.013 8.638 1 9.013 1 12s.013 3.362.066 4.535c.054 1.171.24 1.97.512 2.67a5.391 5.391 0 0 0 1.268 1.949 5.391 5.391 0 0 0 1.949 1.268c.7.272 1.499.458 2.67.512C8.638 22.987 9.013 23 12 23s3.362-.013 4.535-.066c1.171-.054 1.97-.24 2.67-.512a5.391 5.391 0 0 0 1.949-1.268 5.391 5.391 0 0 0 1.268-1.949c.272-.7.458-1.499.512-2.67.053-1.173.066-1.548.066-4.535s-.013-3.362-.066-4.535c-.054-1.171-.24-1.97-.512-2.67a5.391 5.391 0 0 0-1.268-1.949 5.391 5.391 0 0 0-1.949-1.268c-.7-.272-1.499-.458-2.67-.512C15.362 1.013 14.987 1 12 1Zm0 5.351a5.649 5.649 0 1 0 0 11.298 5.649 5.649 0 0 0 0-11.298Zm0 9.316a3.667 3.667 0 1 1 0-7.334 3.667 3.667 0 0 1 0 7.334Zm7.192-9.539a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z" />
-                    </svg>
+                <div className="pixigram-logo">
+                    <img src="/img/pixigram-icon.svg" alt="PixiGram" width="120" height="120" />
                 </div>
                 <div className="hero-content">
 
                     <h1>See everyday moments from your <span className="highlight">close friends</span>.</h1>
                     <div className="hero-image">
-                        {/* <img src="/img/login-hero.png" alt="Instagram preview" /> */}
-
-                        <img alt="Instagram preview" referrerPolicy="origin-when-cross-origin" src="https://static.cdninstagram.com/rsrc.php/v4/yt/r/pAv7hjq-51n.png"></img>
+                        <img alt="PixiGram preview" referrerPolicy="origin-when-cross-origin" src="https://static.cdninstagram.com/rsrc.php/v4/yt/r/pAv7hjq-51n.png"></img>
                     </div>
                 </div>
             </div>
@@ -119,7 +108,7 @@ export function Login() {
                     </svg>
                 </div> */}
                 <div className="login-header">
-                    <h2>Log into InstaShare</h2>
+                    <h2>Log into PixiGram</h2>
                     <span className="settings-icon" onClick={() => setShowRemoveModal(true)}>
                         <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" className="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xxk0z11 xvy4d1p"><path fillRule="evenodd" clipRule="evenodd" d="m19.967 11.267 2.224-2.06a1 1 0 0 0 .187-1.233l-1.702-2.948a1 1 0 0 0-1.162-.455l-2.895.896a7.99 7.99 0 0 0-1.27-.735l-.672-2.954A1 1 0 0 0 13.702 1H10.3a1 1 0 0 0-.975.778l-.672 2.954a7.992 7.992 0 0 0-1.27.735L4.487 4.57a1 1 0 0 0-1.162.455L1.623 7.974a1 1 0 0 0 .187 1.233l2.224 2.06a8.1 8.1 0 0 0 0 1.466l-2.224 2.06a1 1 0 0 0-.187 1.233l1.702 2.948a1 1 0 0 0 1.162.455l2.895-.896a8 8 0 0 0 1.27.735l.672 2.954a1 1 0 0 0 .975.778h3.403a1 1 0 0 0 .975-.778l.672-2.954a7.991 7.991 0 0 0 1.27-.735l2.895.896a1 1 0 0 0 1.162-.455l1.702-2.948a1 1 0 0 0-.187-1.233l-2.224-2.06a8.112 8.112 0 0 0 0-1.466zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
                     </span>
@@ -170,7 +159,7 @@ export function Login() {
                     <a href="#">Terms</a>
                 </div>
                 <div className="footer-copyright">
-                    © 2026 InstaShare from Meta
+                    © 2026 PixiGram from Meta
                 </div>
             </footer>
         </div>
@@ -213,7 +202,7 @@ export function Signup() {
                         <span className="meta-text">ⵔ Meta</span>
                     </div>
 
-                    <h2>Get started on InstaShare</h2>
+                    <h2>Get started on PixiGram</h2>
                     <p className="subtitle">Sign up to see photos and videos from your friends.</p>
 
                     {/* Mobile or Email */}
@@ -295,10 +284,10 @@ export function Signup() {
 
                     {/* Legal text */}
                     <p className="legal-text">
-                        People who use our service may have uploaded your contact information to InstaShare. <a href="#">Learn more</a>.
+                        People who use our service may have uploaded your contact information to PixiGram. <a href="#">Learn more</a>.
                     </p>
                     <p className="legal-text">
-                        By tapping Submit, you agree to create an account and to InstaShare's <a href="#">Terms</a>, <a href="#">Privacy Policy</a> and <a href="#">Cookies Policy</a>.
+                        By tapping Submit, you agree to create an account and to PixiGram's <a href="#">Terms</a>, <a href="#">Privacy Policy</a> and <a href="#">Cookies Policy</a>.
                     </p>
 
                     {/* Submit Button */}

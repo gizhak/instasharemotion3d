@@ -33,7 +33,7 @@
 }
 
 /* Logo at top left */
-.instagram-logo {
+.pixigram-logo {
 	position: absolute;
 	top: 2em;
 	left: 2em;
@@ -618,7 +618,7 @@ input:hover {
 		display: none;
 	}
 
-	.instagram-logo {
+	.pixigram-logo {
 		/* margin-left: auto; */
 		position: static;
 		top: auto;

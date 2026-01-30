@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- App dark background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c1014"/>
+      <stop offset="100%" style="stop-color:#0c1014"/>
+    </linearGradient>
+
+    <!-- White gradient - varying brightness -->
+    <linearGradient id="whiteGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="50%" style="stop-color:#c8c8c8"/>
+      <stop offset="100%" style="stop-color:#ffffff"/>
+    </linearGradient>
+
+    <!-- White gradient - brighter -->
+    <linearGradient id="whiteGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0e0e0"/>
+      <stop offset="50%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#d0d0d0"/>
+    </linearGradient>
+
+    <!-- Elegant gold/amber gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4d03f"/>
+      <stop offset="50%" style="stop-color:#d4a017"/>
+      <stop offset="100%" style="stop-color:#b8860b"/>
+    </linearGradient>
+
+    <!-- Cyan/teal gradient for variety -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5ce1e6"/>
+      <stop offset="50%" style="stop-color:#3db8bd"/>
+      <stop offset="100%" style="stop-color:#2d9a9e"/>
+    </linearGradient>
+
+    <!-- Soft pink/rose gradient -->
+    <linearGradient id="roseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5a9b8"/>
+      <stop offset="50%" style="stop-color:#e08090"/>
+      <stop offset="100%" style="stop-color:#c96b7a"/>
+    </linearGradient>
+
+    <!-- White glow -->
+    <filter id="whiteGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#ffffff" flood-opacity="0.5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Gold glow for stars -->
+    <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#d4a017" flood-opacity="0.7"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Cyan glow -->
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#5ce1e6" flood-opacity="0.7"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Rose glow -->
+    <filter id="roseGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#f5a9b8" flood-opacity="0.6"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="56" y="56" width="400" height="400" rx="88" ry="88" fill="url(#bgGrad)"/>
+  <rect x="56" y="56" width="400" height="400" rx="88" ry="88" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+
+  <!-- Main design: Abstract camera lens with infinity symbol -->
+  <g transform="translate(256, 256)">
+
+    <!-- Outer lens ring - white with varying brightness -->
+    <circle cx="0" cy="0" r="120" fill="none" stroke="url(#whiteGrad1)" stroke-width="6" filter="url(#whiteGlow)"/>
+
+    <!-- Inner lens ring - white brighter -->
+    <circle cx="0" cy="0" r="95" fill="none" stroke="url(#whiteGrad2)" stroke-width="3" filter="url(#whiteGlow)"/>
+
+    <!-- Infinity/motion symbol in center - represents endless photos/moments -->
+    <g filter="url(#whiteGlow)">
+      <path
+        d="M-50 0
+           C-50 -30 -25 -40 0 -25
+           C25 -10 50 -30 50 0
+           C50 30 25 40 0 25
+           C-25 10 -50 30 -50 0"
+        fill="none"
+        stroke="url(#whiteGrad1)"
+        stroke-width="12"
+        stroke-linecap="round"
+      />
+    </g>
+
+    <!-- Center focal point - gold dot -->
+    <circle cx="0" cy="0" r="8" fill="url(#goldGrad)" filter="url(#goldGlow)"/>
+
+  </g>
+
+  <!-- Accent: Three elegant 4-pointed stars in different colors - larger sizes -->
+  <!-- Large gold star -->
+  <g transform="translate(385, 125)" filter="url(#goldGlow)">
+    <path d="M0 -18 L3 -3 L18 0 L3 3 L0 18 L-3 3 L-18 0 L-3 -3 Z" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Medium cyan star -->
+  <g transform="translate(410, 165)" filter="url(#cyanGlow)">
+    <path d="M0 -12 L2 -2 L12 0 L2 2 L0 12 L-2 2 L-12 0 L-2 -2 Z" fill="url(#cyanGrad)"/>
+  </g>
+
+  <!-- Small rose star -->
+  <g transform="translate(422, 205)" filter="url(#roseGlow)">
+    <path d="M0 -8 L1.5 -1.5 L8 0 L1.5 1.5 L0 8 L-1.5 1.5 L-8 0 L-1.5 -1.5 Z" fill="url(#roseGrad)"/>
+  </g>
+
+</svg>
