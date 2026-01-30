@@ -286,7 +286,7 @@ export function UserDetails({ onGalaxyModeClick }) {
 							<button className="edit-btn" onClick={() => navigate(`/setting`)}>
 								Edit profile
 							</button>
-							<button className="archive-btn" onClick={onGalaxyModeClick}>View archive</button>
+							<button className="archive-btn" onClick={onGalaxyModeClick}>Galaxy Mode</button>
 						</section>
 					) : (
 						<section className="btns-section">
